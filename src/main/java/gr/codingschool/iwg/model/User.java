@@ -68,7 +68,6 @@ public class User {
     private String address;
 
     @Column(name = "dateOfBirth")
-    @NotEmpty(message = "*Please provide your date of birth")
     private Date dateOfBirth;
 
     @Column(name = "active")
@@ -85,6 +84,10 @@ public class User {
     public void setId(int id) {
         this.id = id;
     }
+
+    public String getUsername() { return username; }
+
+    public void setUsername(String username) { this.username = username; }
 
     public String getPassword() {
         return password;

@@ -13,7 +13,9 @@ import gr.codingschool.iwg.model.User;
  */
 public interface UserService {
 
-    public User findUserByEmail(String email);
+    User findUserByEmail(String email);
 
-    public void saveUser(User user);
+    void saveUser(User user);
+
+    User findUserByUsernameAndPassword(String username, String password);
 }
