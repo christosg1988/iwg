@@ -5,6 +5,7 @@
  */
 package gr.codingschool.iwg.model;
 
+import java.sql.Date;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,6 +18,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -31,8 +34,13 @@ public class User {
 
     @Id
     @SequenceGenerator(name = "users_id_seq", sequenceName = "users_id_seq")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_id_seq")    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_id_seq")
+    @Column(name = "id")
     private int id;
+    
+    @Column(name = "username")
+    @NotEmpty(message = "*Please provide a username")
+    private String username;
 
     @Column(name = "email")
     @Email(message = "*Please provide a valid Email")
@@ -47,11 +55,21 @@ public class User {
 
     @Column(name = "firstName")
     @NotEmpty(message = "*Please provide your name")
-    private String name;
+    private String firstName;
 
     @Column(name = "lastName")
     @NotEmpty(message = "*Please provide your last name")
     private String lastName;
+
+    @Column(name = "phoneNumber", nullable = true)
+    private String phoneNumber;
+
+    @Column(name = "address", nullable = true)
+    private String address;
+
+    @Column(name = "dateOfBirth")
+    @NotEmpty(message = "*Please provide your date of birth")
+    private Date dateOfBirth;
 
     @Column(name = "active")
     private int active;
@@ -76,12 +94,36 @@ public class User {
         this.password = password;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getLastName() {
