@@ -17,5 +17,5 @@ public interface UserService {
 
     void saveUser(User user);
 
-    User findUserByUsernameAndPassword(String username, String password);
+    User findUserByUsernameAndPassword(User user);
 }

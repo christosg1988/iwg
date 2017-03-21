@@ -31,7 +31,6 @@ public class RegistrationController {
         ModelAndView modelAndView = new ModelAndView();
         User userExists = userService.findUserByEmail(user.getEmail());
         if (userExists != null) {
-            System.out.println("I am here");
             bindingResult
                     .rejectValue("email", "error.user",
                             "There is already a user registered with the email provided");

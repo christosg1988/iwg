@@ -37,7 +37,7 @@ public class LoginController {
     @RequestMapping(value = {"/", "/login"}, method = RequestMethod.POST)
     public ModelAndView loginUser(User user) {
         ModelAndView modelAndView = new ModelAndView();
-        User userExists = userService.findUserByUsernameAndPassword(user.getUsername(),user.getPassword());
+        User userExists = userService.findUserByUsernameAndPassword(user);
 
         modelAndView.setViewName("login");
         return modelAndView;

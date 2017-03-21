@@ -3,4 +3,5 @@ values (1, 1, 'admin', 'admin', 'admin', '$2a$10$bMaNOYGEwfNl2z6hg9lmRuc3s7uAgWx
 '1990/01/01', '21012345678', 'Athens');
 
 insert into roles values (1, 'ROLE_ADMIN');
+insert into roles values (2, 'ROLE_USER');
 insert into users_roles values (1,1);
