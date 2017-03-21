@@ -2,15 +2,15 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title>Registration Form</title>
+        <title>Agile Actors IWG - Register</title>
         <link rel="stylesheet" type="text/css" th:href="@{/css/registration.css}" />
-        <link rel="stylesheet" type="text/css" href="css/main.css" />
+        <link rel="stylesheet" href="../static/css/main.css" th:href="@{css/main.css}" media="screen" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </head>
     <body>
-        <form action="login.html" method="get">
+        <form th:action="@{/login}" method="get">
             <button class="btn btn-primary btn-block" type="Submit">Go To Login Page</button>
         </form>	
 
@@ -20,7 +20,7 @@
                     <form autocomplete="off" action="#" th:action="@{/registration}"
                           th:object="${user}" method="post" class="form-horizontal"
                           role="form">
-                        <h2 style="color: cornsilk">Registration Form</h2>
+                        <h2 style="color: #ffffff" th:text="Registration Form"></h2>
 
                         <div class="form-group mtop40">
                             <div class="col-sm-10 col-md-10 col-md-offset-1">
