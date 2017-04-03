@@ -483,6 +483,11 @@
 	.colored{
 		color: #ffd700;
 	}
+
+	.validation-message{
+	    color: #fe0000;
+	    font-family: "Open Sans Condensed";
+	}
 	
 	
 	
