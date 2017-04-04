@@ -44,8 +44,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findUserByUsernameAndPassword(User user){
-        return userRepository.findByUsernameAndPassword(user.getUsername(), user.getPassword());
+    public boolean authenticate(String username, String password){
+        User user =  userRepository.findByUsername(username);
+
+        if(user == null){
+            return false;
+        }
+        else {
+            return bCryptPasswordEncoder.matches(password, user.getPassword());
+        }
     }
 
 }

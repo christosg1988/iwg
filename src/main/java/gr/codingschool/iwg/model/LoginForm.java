@@ -1,0 +1,34 @@
+package gr.codingschool.iwg.model;
+
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.persistence.Column;
+
+/**
+ * Created by christos_georgiadis on 02/04/2017.
+ */
+public class LoginForm {
+    @Column(name = "username")
+    @NotEmpty(message = "*Please provide a username")
+    private String username;
+
+    @Column(name = "password")
+    @NotEmpty(message = "*Please provide a password")
+    private String password;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+}

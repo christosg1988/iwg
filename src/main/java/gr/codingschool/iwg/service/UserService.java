@@ -17,5 +17,5 @@ public interface UserService {
 
     void saveUser(User user);
 
-    User findUserByUsernameAndPassword(User user);
+    boolean authenticate(String username, String password);
 }

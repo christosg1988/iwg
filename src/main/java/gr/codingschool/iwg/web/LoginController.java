@@ -5,6 +5,7 @@
  */
 package gr.codingschool.iwg.web;
 
+import gr.codingschool.iwg.model.LoginForm;
 import gr.codingschool.iwg.model.User;
 import gr.codingschool.iwg.service.UserService;
 import javax.validation.Valid;
@@ -28,17 +29,35 @@ public class LoginController {
     private UserService userService;
 
     @RequestMapping(value = {"/", "/login"}, method = RequestMethod.GET)
-    public ModelAndView loginPage() {
+    public ModelAndView login() {
         ModelAndView modelAndView = new ModelAndView();
+        LoginForm loginForm = new LoginForm();
+        modelAndView.addObject("loginForm", loginForm);
         modelAndView.setViewName("login");
         return modelAndView;
     }
 
     @RequestMapping(value = {"/", "/login"}, method = RequestMethod.POST)
-    public ModelAndView loginUser(User user) {
+    public ModelAndView login(@Valid LoginForm loginForm, BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView();
-        User userExists = userService.findUserByUsernameAndPassword(user);
 
+        if (bindingResult.hasErrors()) {
+            modelAndView.setViewName("login");
+
+            return modelAndView;
+        }
+
+        boolean userExists = userService.authenticate(loginForm.getUsername(), loginForm.getPassword());
+
+        if (!userExists) {
+            modelAndView.addObject("successMessage", "Login unsuccessful");
+            modelAndView.setViewName("login");
+        }
+        else {
+            modelAndView.addObject("successMessage", "Login successfull");
+            modelAndView.setViewName("login");
+
+        }
         modelAndView.setViewName("login");
         return modelAndView;
     }
