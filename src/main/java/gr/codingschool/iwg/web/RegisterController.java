@@ -12,7 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 
 @Controller
-public class RegistrationController {
+public class RegisterController {
 
     @Autowired
     private UserService userService;
