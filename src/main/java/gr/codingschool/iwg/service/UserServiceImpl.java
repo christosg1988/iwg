@@ -9,7 +9,7 @@ import gr.codingschool.iwg.model.Role;
 import gr.codingschool.iwg.model.User;
 import gr.codingschool.iwg.repository.RoleRepository;
 import gr.codingschool.iwg.repository.UserRepository;
-import java.util.Arrays;
+
 import java.util.Collections;
 import java.util.HashSet;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +36,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void saveUser(User user) {
+    public User save(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setActive(1);
         Role userRole = roleRepository.findByRole("ROLE_USER");
         user.setRoles(new HashSet<>(Collections.singletonList(userRole)));
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     @Override
@@ -58,5 +58,4 @@ public class UserServiceImpl implements UserService {
                 return null;
         }
     }
-
 }

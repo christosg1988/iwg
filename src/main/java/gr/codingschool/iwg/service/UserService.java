@@ -15,7 +15,7 @@ public interface UserService {
 
     User findUserByEmail(String email);
 
-    void saveUser(User user);
+    User save(User user);
 
     User authenticate(String username, String password);
 }

@@ -5,7 +5,6 @@
  */
 package gr.codingschool.iwg.web;
 
-import gr.codingschool.iwg.model.CurrentUser;
 import gr.codingschool.iwg.model.LoginForm;
 import gr.codingschool.iwg.model.User;
 import gr.codingschool.iwg.repository.RoleRepository;
@@ -15,12 +14,6 @@ import gr.codingschool.iwg.service.UserService;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
