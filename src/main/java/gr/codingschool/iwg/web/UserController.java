@@ -11,25 +11,16 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpSession;
 
 @Controller
-public class HomeController {
+public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/user/home"}, method = RequestMethod.GET)
     public ModelAndView home(HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();
         User loggedInUser = (User) session.getAttribute("user");
-        if(loggedInUser != null) {
-            modelAndView.addObject("user", loggedInUser);
-            if(loggedInUser.hasRole("ROLE_USER"))
-                modelAndView.setViewName("redirect:/user/home");
-            else if(loggedInUser.hasRole("ROLE_ADMIN"))
-                modelAndView.setViewName("redirect:/admin/home");
-            return modelAndView;
-        }
-        else{
-            modelAndView.setViewName("index");
-            return modelAndView;
-        }
+        modelAndView.addObject("user", loggedInUser);
+        modelAndView.setViewName("user/index");
+        return modelAndView;
     }
 }

@@ -6,6 +6,7 @@
 package gr.codingschool.iwg.model;
 
 import java.sql.Date;
+import java.util.Collection;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -23,6 +24,8 @@ import javax.persistence.TemporalType;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 
 /**
  *
@@ -30,7 +33,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 @Entity
 @Table(name = "users")
-public class User {
+public class User{
 
     @Id
     @SequenceGenerator(name = "users_id_seq", sequenceName = "users_id_seq")
@@ -155,6 +158,24 @@ public class User {
 
     public Set<Role> getRoles() {
         return roles;
+    }
+
+    public String[] getRoleStrings(){
+        String[] roleStrings = new String[roles.size()];
+        int i = 0;
+        for(Role r : roles){
+            roleStrings[i] = r.getRole();
+            i++;
+        }
+        return roleStrings;
+    }
+
+    public boolean hasRole(String role){
+        for(Role r : roles){
+            if(r.getRole().equals(role))
+                return true;
+        }
+        return false;
     }
 
     public void setRoles(Set<Role> roles) {
