@@ -10,13 +10,19 @@
 </head>
 <body>
 
-<nav class="navbar navbar-inverse">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="/home">IWG Agile Actors</a>
-        </div>
+<nav role="navigation" class="navbar navbar-inverse">
+    <div class="navbar-header">
+        <button type="button" data-target="#navbarCollapse" data-toggle="collapse" class="navbar-toggle">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a href="#" class="navbar-brand">IWG Agile Actors</a>
+    </div>
+    <div id="navbarCollapse" class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
-            <li><a href="/home" class="active">Home</a></li>
+            <li class="active"><a href="/home">Home</a></li>
             <li><a href="#">Games</a></li>
             <li><a href="#">Wallet</a></li>
         </ul>
