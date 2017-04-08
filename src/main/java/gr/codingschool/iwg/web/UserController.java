@@ -15,7 +15,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = {"/user/home"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/user","/user/home"}, method = RequestMethod.GET)
     public ModelAndView home(HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();
         User loggedInUser = (User) session.getAttribute("user");

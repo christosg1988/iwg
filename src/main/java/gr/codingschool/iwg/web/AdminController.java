@@ -1,5 +1,6 @@
 package gr.codingschool.iwg.web;
 
+import gr.codingschool.iwg.model.Role;
 import gr.codingschool.iwg.model.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +11,7 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 public class AdminController {
-    @RequestMapping(value = {"/admin/home"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/admin","/admin/home"}, method = RequestMethod.GET)
     public ModelAndView adminHome(HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();
         User loggedInUser = (User) session.getAttribute("user");

@@ -6,6 +6,7 @@
 package gr.codingschool.iwg.web;
 
 import gr.codingschool.iwg.model.LoginForm;
+import gr.codingschool.iwg.model.Role;
 import gr.codingschool.iwg.model.User;
 import gr.codingschool.iwg.repository.RoleRepository;
 import gr.codingschool.iwg.service.SecurityService;
@@ -14,6 +15,7 @@ import gr.codingschool.iwg.service.UserService;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,11 +37,16 @@ public class LoginController {
     private RoleRepository roleRepository;
 
     @RequestMapping(value = {"/login"}, method = RequestMethod.GET)
-    public ModelAndView login() {
+    public ModelAndView login(HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();
-        LoginForm loginForm = new LoginForm();
-        modelAndView.addObject("loginForm", loginForm);
-        modelAndView.setViewName("login");
+        if(session.getAttribute("user") != null){
+            modelAndView.setViewName("redirect:/home");
+        }
+        else {
+            LoginForm loginForm = new LoginForm();
+            modelAndView.addObject("loginForm", loginForm);
+            modelAndView.setViewName("login");
+        }
         return modelAndView;
     }
 
@@ -53,14 +60,18 @@ public class LoginController {
         }
 
         User existingUser = userService.authenticate(loginForm.getUsername(), loginForm.getPassword());
+        if(existingUser == null)
+        {
+            modelAndView.addObject("successMessage", "Login unsuccessfull");
+            modelAndView.setViewName("login");
+            return modelAndView;
+        }
+
         securityService.authenticateUser(existingUser);
 
         modelAndView.addObject("user",existingUser);
         session.setAttribute("user", existingUser);
-        if(existingUser.getRoles().contains(roleRepository.findByRole("ROLE_ADMIN")))
-            modelAndView.setViewName("redirect:/admin/home");
-        else
-            modelAndView.setViewName("redirect:/home");
+        modelAndView.setViewName("redirect:/home");
         return modelAndView;
     }
 }

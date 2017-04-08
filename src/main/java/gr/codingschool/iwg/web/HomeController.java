@@ -22,9 +22,9 @@ public class HomeController {
         if(loggedInUser != null) {
             modelAndView.addObject("user", loggedInUser);
             if(loggedInUser.hasRole("ROLE_USER"))
-                modelAndView.setViewName("redirect:/user/home");
+                modelAndView.setViewName("redirect:/user");
             else if(loggedInUser.hasRole("ROLE_ADMIN"))
-                modelAndView.setViewName("redirect:/admin/home");
+                modelAndView.setViewName("redirect:/admin");
             return modelAndView;
         }
         else{

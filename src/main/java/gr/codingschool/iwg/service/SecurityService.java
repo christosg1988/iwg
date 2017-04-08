@@ -9,7 +9,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SecurityService {
+    private void clearAuthentication(){
+        SecurityContextHolder.clearContext();
+    }
+
     public void authenticateUser(User user){
+        clearAuthentication();
         CurrentUser currentUser = new CurrentUser(user);
         Authentication auth = new UsernamePasswordAuthenticationToken(currentUser.getUsername(), currentUser.getPassword(),
                 currentUser.getAuthorities());
