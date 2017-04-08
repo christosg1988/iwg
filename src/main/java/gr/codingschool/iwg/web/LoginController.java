@@ -8,6 +8,8 @@ package gr.codingschool.iwg.web;
 import gr.codingschool.iwg.model.LoginForm;
 import gr.codingschool.iwg.model.User;
 import gr.codingschool.iwg.service.UserService;
+
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -28,7 +30,7 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = {"/", "/login"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/login"}, method = RequestMethod.GET)
     public ModelAndView login() {
         ModelAndView modelAndView = new ModelAndView();
         LoginForm loginForm = new LoginForm();
@@ -37,8 +39,8 @@ public class LoginController {
         return modelAndView;
     }
 
-    @RequestMapping(value = {"/", "/login"}, method = RequestMethod.POST)
-    public ModelAndView login(@Valid LoginForm loginForm, BindingResult bindingResult) {
+    @RequestMapping(value = {"/login"}, method = RequestMethod.POST)
+    public ModelAndView login(@Valid LoginForm loginForm, BindingResult bindingResult, HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();
 
         if (bindingResult.hasErrors()) {
@@ -47,29 +49,17 @@ public class LoginController {
             return modelAndView;
         }
 
-        boolean userExists = userService.authenticate(loginForm.getUsername(), loginForm.getPassword());
+        User existingUser = userService.authenticate(loginForm.getUsername(), loginForm.getPassword());
 
-        if (!userExists) {
+        if (existingUser == null) {
             modelAndView.addObject("successMessage", "Login unsuccessful");
             modelAndView.setViewName("login");
         }
         else {
-            modelAndView.addObject("successMessage", "Login successfull");
-            modelAndView.setViewName("login");
-
+            modelAndView.addObject("user",existingUser);
+            session.setAttribute("user", existingUser);
+            modelAndView.setViewName("redirect:/home");
         }
-        modelAndView.setViewName("login");
-        return modelAndView;
-    }
-
-    @RequestMapping(value = "/admin/home", method = RequestMethod.GET)
-    public ModelAndView home() {
-        ModelAndView modelAndView = new ModelAndView();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByEmail(auth.getName());
-        modelAndView.addObject("userName", "Welcome " + user.getFirstName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
-        modelAndView.addObject("adminMessage", "Content Available Only for Users with Admin Role");
-        modelAndView.setViewName("admin/home");
         return modelAndView;
     }
 }

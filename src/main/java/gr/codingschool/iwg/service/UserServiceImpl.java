@@ -44,14 +44,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean authenticate(String username, String password){
+    public User authenticate(String username, String password){
         User user =  userRepository.findByUsername(username);
 
         if(user == null){
-            return false;
+            return null;
         }
         else {
-            return bCryptPasswordEncoder.matches(password, user.getPassword());
+            if(bCryptPasswordEncoder.matches(password, user.getPassword()))
+                return user;
+            else
+                return null;
         }
     }
 

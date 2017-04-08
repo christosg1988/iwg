@@ -17,5 +17,5 @@ public interface UserService {
 
     void saveUser(User user);
 
-    boolean authenticate(String username, String password);
+    User authenticate(String username, String password);
 }
