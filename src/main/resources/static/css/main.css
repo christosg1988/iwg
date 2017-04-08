@@ -37,7 +37,11 @@
 
 		03. Backgrounds
 
-		04. Responsive
+		04. Web Container
+
+		    + Navbar
+
+		05. Responsive
 		
 			+ Resolution Under 992px
 			+ Resolution Under 768px
@@ -547,7 +551,7 @@
 
 /*======================
 
-	04. Backgrounds
+	03. Backgrounds
 
 ========================*/
 
@@ -571,9 +575,26 @@
 
 
 
+/*======================
+
+	04. Web Container
+
+========================*/
+
+
+
+
+/* Navbar
+----------------------------*/
+
+
+
+
+
+
 /*========================
 
-	17. Responsive
+	05. Responsive
 
 ==========================*/
 
