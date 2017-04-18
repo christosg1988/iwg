@@ -20,7 +20,6 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
         User loggedInUser = (User) session.getAttribute("user");
         modelAndView.addObject("user", loggedInUser);
-        modelAndView.addObject("username", loggedInUser.getUsername());
         modelAndView.setViewName("user/index");
         return modelAndView;
     }

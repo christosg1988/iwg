@@ -36,7 +36,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6 col-md-offset-3 mtop10 quicksand">
-            <img style="margin: 0 auto" class="img-responsive" th:src="${game.image}" th:title="${game.name}" th:alt="${game.name}">
+            <img style="margin: 0 auto; height: 100px" class="img-responsive" th:src="${game.image}" th:title="${game.name}" th:alt="${game.name}">
         </div>
         <div class="col-md-6 col-md-offset-3 mtop10 mbottom10 quicksand">
             <form method="POST" th:object="${game}" class="form-signin quicksand">
