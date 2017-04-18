@@ -4,6 +4,7 @@ import gr.codingschool.iwg.model.Game;
 import gr.codingschool.iwg.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,7 +27,14 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
+    @Transactional
     public Game saveGame(Game game){
         return gameRepository.save(game);
+    }
+
+    @Override
+    @Transactional
+    public int deleteGameById(int id) {
+        return gameRepository.deleteById(id);
     }
 }

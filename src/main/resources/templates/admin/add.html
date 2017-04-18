@@ -36,17 +36,14 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6 col-md-offset-3 mtop10 quicksand">
-            <img style="margin: 0 auto" class="img-responsive" th:src="${game.image}" th:title="${game.name}" th:alt="${game.name}">
-        </div>
-        <div class="col-md-6 col-md-offset-3 mtop10 mbottom10 quicksand">
             <form method="POST" th:object="${game}" class="form-signin quicksand">
-                <h3 style="color: cornsilk" class="form-signin-heading">Modify Game</h3>
+                <h3 style="color: cornsilk" class="form-signin-heading">Add a new game</h3>
 
                 <div class="form-group mtop40">
                     <div class="col-sm-10 col-md-10 col-md-offset-1">
                         <label for="name">Game name</label>
                         <input type="text" id="name" th:field="*{name}"
-                               th:placeholder="*{name}" class="form-control"  title="Name"/>
+                               placeholder="Game name" class="form-control"  title="Name"/>
                     </div>
                 </div>
 
@@ -54,7 +51,7 @@
                     <div class="col-sm-10 col-md-10 col-md-offset-1">
                         <label for="image">Game image source</label>
                         <input type="text" id="image" th:field="*{image}"
-                               th:placeholder="*{image}" class="form-control"  title="Image source"/>
+                               placeholder="Game image source" class="form-control"  title="Image source"/>
                     </div>
                 </div>
 
@@ -62,7 +59,7 @@
                     <div class="col-sm-10 col-md-10 col-md-offset-1">
                         <label for="description">Game description</label>
                         <input type="text" id="description" th:field="*{description}"
-                               th:placeholder="*{description}" class="form-control"  title="Description"/>
+                               placeholder="Game description" class="form-control"  title="Description"/>
                     </div>
                 </div>
 
@@ -70,7 +67,7 @@
                     <div class="col-sm-10 col-md-10 col-md-offset-1">
                         <label for="odds">Game odds</label>
                         <input type="number" id="odds" th:field="*{odds}"
-                               th:placeholder="*{odds}" class="form-control"  title="Odds"/>
+                               placeholder="Game odds" class="form-control"  title="Odds"/>
                     </div>
                 </div>
 
@@ -78,7 +75,7 @@
                     <div class="col-sm-10 col-md-10 col-md-offset-1">
                         <label for="price">Game price</label>
                         <input type="number" id="price" th:field="*{price}"
-                               th:placeholder="*{price}" class="form-control" />
+                               placeholder="Game price" class="form-control" />
                     </div>
                 </div>
 
@@ -86,21 +83,13 @@
                     <div class="col-sm-10 col-md-10 col-md-offset-1">
                         <label for="prize">Game prize</label>
                         <input type="number" id="prize" th:field="*{prize}"
-                               th:placeholder="*{prize}" class="form-control" />
+                               placeholder="Game prize" class="form-control" />
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="form-group mtop40">
-                        <div class="col-sm-6 col-md-6 ">
-                            <button class="btn btn-success btn-block mtop40" name="Save" value="Save" type="Submit" th:text="Save">Save game</button>
-                        </div>
-                    </div>
-
-                    <div class="form-group mtop40">
-                        <div class="col-sm-6 col-md-6 ">
-                            <a th:href="@{/admin/games/delete(id=${game.id})}" class="btn btn-danger btn-block mtop40" name="Delete" type="Submit" th:text="Delete">Delete game</a>
-                        </div>
+                <div class="form-group mtop40">
+                    <div class="col-sm-10 col-md-10 col-md-offset-1">
+                        <button class="btn btn-success btn-block mtop40" name="Save" value="Save" type="Submit" th:text="Save">Save game</button>
                     </div>
                 </div>
             </form>

@@ -14,4 +14,5 @@ public interface GameRepository extends JpaRepository<Game, Long> {
     List<Game> findAll();
     Game findById(int id);
     Game save(Game game);
+    int deleteById(int id);
 }

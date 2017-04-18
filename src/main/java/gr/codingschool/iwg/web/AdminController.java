@@ -49,6 +49,28 @@ public class AdminController {
         return modelAndView;
     }
 
+    @RequestMapping(value = {"/admin/games/add"}, method = RequestMethod.GET)
+    public ModelAndView adminAddGame(HttpSession session) {
+        ModelAndView modelAndView = new ModelAndView();
+        User loggedInUser = (User) session.getAttribute("user");
+        Game game = new Game();
+        modelAndView.addObject("user", loggedInUser);
+        modelAndView.addObject("game", game);
+        modelAndView.setViewName("admin/add");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = {"/admin/games/add"}, method = RequestMethod.POST)
+    public ModelAndView adminAddGame(Game game, HttpSession session) {
+        ModelAndView modelAndView = new ModelAndView();
+        User loggedInUser = (User) session.getAttribute("user");
+        Game savedGame = gameService.saveGame(game);
+        modelAndView.addObject("user", loggedInUser);
+        modelAndView.addObject("game", game);
+        modelAndView.setViewName("admin/add");
+        return modelAndView;
+    }
+
     @RequestMapping(value = {"/admin/games/edit"}, method = RequestMethod.POST)
     public ModelAndView adminSaveGame(Game game, HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();
@@ -60,6 +82,15 @@ public class AdminController {
         return modelAndView;
     }
 
-
-
+    @RequestMapping(value = {"/admin/games/delete"}, method = RequestMethod.GET)
+    public ModelAndView adminDeleteGame(@RequestParam("id") int id, HttpSession session) {
+        ModelAndView modelAndView = new ModelAndView();
+        User loggedInUser = (User) session.getAttribute("user");
+        Game game = gameService.findGameById(id);
+        gameService.deleteGameById(id);
+        modelAndView.addObject("user", loggedInUser);
+        modelAndView.addObject("game", game);
+        modelAndView.setViewName("admin/deleted");
+        return modelAndView;
+    }
 }

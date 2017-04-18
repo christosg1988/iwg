@@ -11,4 +11,5 @@ public interface GameService {
     List<Game> findAllGames();
     Game findGameById(int id);
     Game saveGame(Game game);
+    int deleteGameById(int id);
 }
