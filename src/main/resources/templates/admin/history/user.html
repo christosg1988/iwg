@@ -7,6 +7,34 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/bs-3.3.5/jq-2.1.4,dt-1.10.8/datatables.min.css"/>
+
+    <script type="text/javascript" src="https://cdn.datatables.net/r/bs-3.3.5/jqc-1.11.3,dt-1.10.8/datatables.min.js"></script>
+    <script type="text/javascript" charset="utf-8">
+$(document).ready(function() {
+    // Setup - add a text input to each footer cell
+    $('#history tfoot th').each( function () {
+        var title = $(this).text();
+        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+    } );
+
+    // DataTable
+    var table = $('#history').DataTable();
+
+    // Apply the search
+    table.columns().every( function () {
+        var that = this;
+
+        $( 'input', this.footer() ).on( 'keyup change', function () {
+            if ( that.search() !== this.value ) {
+                that
+                    .search( this.value )
+                    .draw();
+            }
+        } );
+    } );
+} );
+    </script>
 </head>
 <body>
 
@@ -36,16 +64,23 @@
 
 <div class="container">
     <h3 style="color: cornsilk" class="form-signin-heading">History for user '<span th:utext="${userHistory.username}"></span>'</h3>
-    <table class="table white-bg">
+    <table id="history" class="table white-bg">
         <thead>
-            <tr>
-                <th class="text-left">Date</th>
-                <th class="text-left">Event type</th>
-                <th class="text-left">Event information</th>
-            </tr>
+        <tr>
+            <th class="text-left">Date</th>
+            <th class="text-left">Event type</th>
+            <th class="text-left">Event information</th>
+        </tr>
         </thead>
+        <tfoot>
+        <tr>
+            <th class="text-left">Date</th>
+            <th class="text-left">Event type</th>
+            <th class="text-left">Event information</th>
+        </tr>
+        </tfoot>
         <tr th:each="event : ${events}">
-            <td class="text-left" th:text="${event.dateCreated}"></td>
+            <td class="text-left" th:text="${#dates.format(event.dateCreated, 'dd/MM/yyyy HH:mm:ss')}"></td>
             <td class="text-left" th:text="${event.type}"></td>
             <td class="text-left" th:text="${event.information}"></td>
         </tr>
