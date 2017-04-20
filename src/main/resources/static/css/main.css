@@ -128,7 +128,7 @@
 		text-align: center;
 		float: none;
 	}
-	
+
 
 	img {
 	    -moz-user-select: none; 
@@ -154,6 +154,28 @@
 		outline:none;
 		color: #941002;		/*#505050*/
 	
+	}
+
+	.pagination pagination-centered {
+		display: inline-block;
+	}
+
+	.pagination pagination-centered li {
+		color: black;
+		float: left;
+		padding: 8px 16px;
+		text-decoration: none;
+	}
+
+	.pagination pagination-centered li.active {
+		background-color: #4CAF50;
+		color: white;
+		border-radius: 5px;
+	}
+
+	.pagination pagination-centered li:hover:not(.active) {
+		background-color: #ddd;
+		border-radius: 5px;
 	}
 	
 	a i:hover,
