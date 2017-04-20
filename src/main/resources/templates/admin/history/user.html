@@ -5,7 +5,7 @@
     <title>Agile Actors IWG - Admin</title>
     <link rel="stylesheet" type="text/css" href="/css/main.css" th:href="@{/css/main.css}" media="screen" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
@@ -34,25 +34,22 @@
     </div>
 </nav>
 
-    <div class="container" style="margin-bottom:20px; margin-top:20px;max-width:1200px;">
-        <div class="row">
-            <div class="col-sm-6 col-xs-6 col-md-6 col-lg-6 col-md-offset-3">
-                <h3 style="color: cornsilk" class="form-signin-heading">The following game has been deleted</h3>
-                <div class="thumbnail bootsnipp-thumb">
-                    <div style="width: auto;">
-                        <img style="margin: 0 auto" class="img-responsive" th:src="${game.image}" th:title="${game.description}" alt="bootstrap 4 card ">
-                    </div>
-                    <div class="panel-body text-center">
-                        <p><strong th:text="${game.name}"></strong></p>
-                    </div>
-                    <ul class="list-group text-center">
-                        <li class="list-group-item"><i class="fa fa-check"></i><span>Odds of winning: </span><span th:text="${game.odds}"></span><span> %</span></li>
-                        <li class="list-group-item"><i class="fa fa-check"></i><span>Game price: </span><span th:text="${game.price}"></span><span> &euro;</span></li>
-                        <li class="list-group-item"><i class="fa fa-check"></i> <span>Prize: </span><span th:text="${game.prize}"></span><span> &euro;</span></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="container">
+    <h3 style="color: cornsilk" class="form-signin-heading">History for user '<span th:utext="${userHistory.username}"></span>'</h3>
+    <table class="table white-bg">
+        <thead>
+            <tr>
+                <th class="text-left">Date</th>
+                <th class="text-left">Event type</th>
+                <th class="text-left">Event information</th>
+            </tr>
+        </thead>
+        <tr th:each="event : ${events}">
+            <td class="text-left" th:text="${event.dateCreated}"></td>
+            <td class="text-left" th:text="${event.type}"></td>
+            <td class="text-left" th:text="${event.information}"></td>
+        </tr>
+    </table>
+</div>
 </body>
 </html>

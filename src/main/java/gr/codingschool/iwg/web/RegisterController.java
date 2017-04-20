@@ -1,6 +1,8 @@
 package gr.codingschool.iwg.web;
 
+import gr.codingschool.iwg.model.Event;
 import gr.codingschool.iwg.model.User;
+import gr.codingschool.iwg.service.EventService;
 import gr.codingschool.iwg.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -16,6 +19,8 @@ public class RegisterController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private EventService eventService;
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public ModelAndView registration() {
@@ -27,7 +32,7 @@ public class RegisterController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult) {
+    public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult, HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();
         User userExists = userService.findUserByEmail(user.getEmail());
         if (userExists != null) {
@@ -39,9 +44,16 @@ public class RegisterController {
             modelAndView.setViewName("register");
         } else {
             userService.save(user);
-            modelAndView.addObject("successMessage", "User has been registered successfully");
+
+            Event registerEvent = new Event();
+            registerEvent.setUser(user);
+            registerEvent.setType("Registration");
+            registerEvent.setInformation("The user registered");
+            eventService.save(registerEvent);
+
             modelAndView.addObject("user", new User());
-            modelAndView.setViewName("register");
+            session.setAttribute("user", user);
+            modelAndView.setViewName("redirect:/home");
         }
         return modelAndView;
     }

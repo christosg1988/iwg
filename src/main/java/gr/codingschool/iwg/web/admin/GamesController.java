@@ -1,7 +1,9 @@
 package gr.codingschool.iwg.web.admin;
 
+import gr.codingschool.iwg.model.Event;
 import gr.codingschool.iwg.model.Game;
 import gr.codingschool.iwg.model.User;
+import gr.codingschool.iwg.service.EventService;
 import gr.codingschool.iwg.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,8 @@ import java.util.List;
 public class GamesController {
     @Autowired
     private GameService gameService;
+    @Autowired
+    private EventService eventService;
 
     @RequestMapping(value = {"/admin/games"}, method = RequestMethod.GET)
     public ModelAndView adminGames(HttpSession session) {
@@ -55,7 +59,14 @@ public class GamesController {
     public ModelAndView adminAddGame(Game game, HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();
         User loggedInUser = (User) session.getAttribute("user");
-        Game savedGame = gameService.saveGame(game);
+        gameService.saveGame(game);
+
+        Event addGameEvent = new Event();
+        addGameEvent.setUser(loggedInUser);
+        addGameEvent.setType("Add game");
+        addGameEvent.setInformation("Added a game with name: " + game.getName());
+        eventService.save(addGameEvent);
+
         modelAndView.addObject("user", loggedInUser);
         modelAndView.addObject("game", game);
         modelAndView.setViewName("admin/games/add");
@@ -65,8 +76,16 @@ public class GamesController {
     @RequestMapping(value = {"/admin/games/edit"}, method = RequestMethod.POST)
     public ModelAndView adminSaveGame(Game game, HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();
-        User loggedInUser = (User) session.getAttribute("user");
+        User loggedInUser;
+        loggedInUser = (User) session.getAttribute("user");
         gameService.saveGame(game);
+
+        Event editGameEvent = new Event();
+        editGameEvent.setUser(loggedInUser);
+        editGameEvent.setType("Edit game");
+        editGameEvent.setInformation("Edited the game with name: " + game.getName());
+        eventService.save(editGameEvent);
+
         modelAndView.addObject("user", loggedInUser);
         modelAndView.addObject("game", game);
         modelAndView.setViewName("admin/games/edit");

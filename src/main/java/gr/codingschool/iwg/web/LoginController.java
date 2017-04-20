@@ -5,10 +5,12 @@
  */
 package gr.codingschool.iwg.web;
 
+import gr.codingschool.iwg.model.Event;
 import gr.codingschool.iwg.model.LoginForm;
 import gr.codingschool.iwg.model.Role;
 import gr.codingschool.iwg.model.User;
 import gr.codingschool.iwg.repository.RoleRepository;
+import gr.codingschool.iwg.service.EventService;
 import gr.codingschool.iwg.service.SecurityService;
 import gr.codingschool.iwg.service.UserService;
 
@@ -33,6 +35,8 @@ public class LoginController {
     private UserService userService;
     @Autowired
     private SecurityService securityService;
+    @Autowired
+    private EventService eventService;
     @Autowired
     private RoleRepository roleRepository;
 
@@ -62,12 +66,27 @@ public class LoginController {
         User existingUser = userService.authenticate(loginForm.getUsername(), loginForm.getPassword());
         if(existingUser == null)
         {
+            User failedUser = userService.findByUsername(loginForm.getUsername());
+            if(failedUser != null) {
+                Event loginEvent = new Event();
+                loginEvent.setUser(failedUser);
+                loginEvent.setType("Failed Login");
+                loginEvent.setInformation("The user failed to login");
+                eventService.save(loginEvent);
+            }
+
             modelAndView.addObject("successMessage", "Login unsuccessfull");
             modelAndView.setViewName("login");
             return modelAndView;
         }
 
         securityService.authenticateUser(existingUser);
+
+        Event loginEvent = new Event();
+        loginEvent.setUser(existingUser);
+        loginEvent.setType("Login");
+        loginEvent.setInformation("The user logged in");
+        eventService.save(loginEvent);
 
         modelAndView.addObject("user",existingUser);
         session.setAttribute("user", existingUser);

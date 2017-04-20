@@ -1,8 +1,10 @@
 package gr.codingschool.iwg.web.admin;
 
+import gr.codingschool.iwg.model.Event;
 import gr.codingschool.iwg.model.Game;
 import gr.codingschool.iwg.model.Notification;
 import gr.codingschool.iwg.model.User;
+import gr.codingschool.iwg.service.EventService;
 import gr.codingschool.iwg.service.NotificationService;
 import gr.codingschool.iwg.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,8 @@ public class NotificationsController {
     private UserService userService;
     @Autowired
     private NotificationService notificationService;
+    @Autowired
+    private EventService eventService;
 
     @RequestMapping(value = {"/admin/notifications"}, method = RequestMethod.GET)
     public ModelAndView adminNotifications(HttpSession session) {
@@ -34,7 +38,7 @@ public class NotificationsController {
     }
 
     @RequestMapping(value = {"/admin/notifications/send"}, method = RequestMethod.GET)
-    public ModelAndView adminCreateNotificationGame(@RequestParam("username") String username, HttpSession session) {
+    public ModelAndView adminCreateNotification(@RequestParam("username") String username, HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();
         User loggedInUser = (User) session.getAttribute("user");
         User userToSend = userService.findByUsername(username);
@@ -54,6 +58,14 @@ public class NotificationsController {
         userToSend = userService.findByUsername(userToSend.getUsername());
         notification.setUser(userToSend);
         notificationService.save(notification);
+
+        Event sendNotificationEvent = new Event();
+        sendNotificationEvent.setUser(loggedInUser);
+        sendNotificationEvent.setType("User notification");
+        sendNotificationEvent.setInformation("Sent a notification to user: " + userToSend.getUsername() + "" +
+                " with content: " + notification.getMessage());
+        eventService.save(sendNotificationEvent);
+
         modelAndView.addObject("user", loggedInUser);
         modelAndView.addObject("notification", notification);
         modelAndView.setViewName("/admin/notifications/sent");

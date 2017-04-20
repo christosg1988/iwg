@@ -4,11 +4,11 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "notifications")
-public class Notification {
+@Table(name = "events")
+public class Event {
     @Id
-    @SequenceGenerator(name = "notifications_id_seq", sequenceName = "notifications_id_seq")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notifications_id_seq")
+    @SequenceGenerator(name = "event_id_seq", sequenceName = "event_id_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "event_id_seq")
     @Column(name = "id")
     private int id;
 
@@ -21,11 +21,11 @@ public class Notification {
     @JoinColumn(name = "userId", referencedColumnName = "id")
     private User user;
 
-    @Column(name = "message")
-    private String message;
+    @Column(name = "type")
+    private String type;
 
-    @Column(name = "read")
-    private Boolean read = false;
+    @Column(name = "info")
+    private String information;
 
     public int getId() {
         return id;
@@ -51,19 +51,19 @@ public class Notification {
         this.user = user;
     }
 
-    public String getMessage() {
-        return message;
+    public String getType() {
+        return type;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public Boolean getRead() {
-        return read;
+    public String getInformation() {
+        return information;
     }
 
-    public void setRead(Boolean read) {
-        this.read = read;
+    public void setInformation(String information) {
+        this.information = information;
     }
 }
