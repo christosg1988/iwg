@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -32,7 +31,7 @@ public class RegisterController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult, HttpSession session) {
+    public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView();
         User userExists = userService.findUserByEmail(user.getEmail());
         if (userExists != null) {
@@ -51,9 +50,8 @@ public class RegisterController {
             registerEvent.setInformation("The user registered");
             eventService.save(registerEvent);
 
-            modelAndView.addObject("user", new User());
-            session.setAttribute("user", user);
-            modelAndView.setViewName("redirect:/home");
+            modelAndView.addObject("successRegister", true);
+            modelAndView.setViewName("redirect:/login");
         }
         return modelAndView;
     }

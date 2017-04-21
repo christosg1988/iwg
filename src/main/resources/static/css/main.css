@@ -493,15 +493,20 @@
 	    font-family: "Open Sans Condensed";
 	}
 
-	.success-message{
+	.failure-message{
 		color: #fe0000;
 		font-family: "Open Sans Condensed";
 	}
-	
-	
-	
-	
-	
+	.success-message{
+		color: #008000;
+		font-family: "Open Sans Condensed";
+	}
+
+
+
+
+
+
 /* Font Sizes
 -------------------------*/
 
