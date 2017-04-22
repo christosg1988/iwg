@@ -5,7 +5,10 @@ import gr.codingschool.iwg.model.Game;
 import gr.codingschool.iwg.model.User;
 import gr.codingschool.iwg.service.EventService;
 import gr.codingschool.iwg.service.GameService;
+import gr.codingschool.iwg.web.PageWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,12 +26,15 @@ public class GamesController {
     private EventService eventService;
 
     @RequestMapping(value = {"/admin/games"}, method = RequestMethod.GET)
-    public ModelAndView adminGames(HttpSession session) {
+    public ModelAndView adminGames(Pageable pageable, HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();
         User loggedInUser = (User) session.getAttribute("user");
-        List<Game> games = gameService.findAllGames();
+        Page<Game> gamePage = gameService.findAllGames(pageable);
+        PageWrapper<Game> page = new PageWrapper<Game>(gamePage, "/admin/games");
+
         modelAndView.addObject("user", loggedInUser);
-        modelAndView.addObject("list", games);
+        modelAndView.addObject("list", page.getContent());
+        modelAndView.addObject("page", page);
         modelAndView.setViewName("admin/games");
         return modelAndView;
     }

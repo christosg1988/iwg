@@ -5,8 +5,11 @@
     <title>Agile Actors IWG - User</title>
     <link rel="stylesheet" type="text/css" href="../../static/css/main.css" th:href="@{../css/main.css}" media="screen" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
+    <script src="../../static/js/main.js"></script>
 </head>
 <body>
 
@@ -33,10 +36,66 @@
     </div>
 </nav>
 
-<div class="container">
+<label for="selection">Sort by</label>
+<div id="selection" class="btn-group bootstrap-select">
+    <select class="selectpicker" id="myselect" name="location" onchange="window.location='/home.html?id='+this.value+'&pos='+this.selectedIndex;" tabindex="-98">
+        <option>Name</option>
+        <option>Odds</option>
+        <option>Price</option>
+        <option>Prize</option>
+    </select>
+</div>
+
+
+<div class="container" style="margin-bottom:20px; margin-top:20px;max-width:1200px;">
     <div class="row">
-        <div class="col-md-6 col-md-offset-3 mtop40 quicksand">
-            <h2 style="color: cornsilk">This is a placeholder for the main user page</h2>
+        <div class="col-sm-12 col-xs-12 col-md-4 col-lg-3" th:each="game : ${list}">
+            <div class="thumbnail bootsnipp-thumb">
+                <div style="width: auto;">
+                    <img style="height: 100px; margin: 0 auto" class="img-responsive" th:src="${game.image}" th:title="${game.description}" th:alt="${game.description}">
+                </div>
+                <div class="panel-body text-center">
+                    <p><strong th:text="${game.name}"></strong></p>
+                </div>
+                <ul class="list-group text-center">
+                    <li class="list-group-item"><i class="fa fa-check"></i><span>Odds of winning: </span><span th:text="${game.odds}"></span><span> %</span></li>
+                    <li class="list-group-item"><i class="fa fa-check"></i><span>Game price: </span><span th:text="${game.price}"></span><span> &euro;</span></li>
+                    <li class="list-group-item"><i class="fa fa-check"></i> <span>Prize: </span><span th:text="${game.prize}"></span><span> &euro;</span></li>
+                </ul>
+                <div class="caption">
+                    <a href="#">
+                        <button type="button" class="btn btn-success">Play game</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination Bar -->
+    <div th:fragment='paginationbar'>
+        <div>
+            <ul class='pagination pagination-centered'>
+                <li th:class="${page.firstPage}?'disabled':''">
+                    <span th:if='${page.firstPage}'>← First</span>
+                    <a th:if='${not page.firstPage}' th:href='@{${page.url}(page=0,size=${page.size})}'>← First</a>
+                </li>
+                <li th:class="${page.hasPreviousPage}? '' : 'disabled'">
+                    <span th:if='${not page.hasPreviousPage}'>«</span>
+                    <a th:if='${page.hasPreviousPage}' th:href='@{${page.url}(page=${page.number-2},size=${page.size})}' title='Go to previous page'>«</a>
+                </li>
+                <li th:each='item : ${page.items}' th:class="${item.current}? 'active' : ''">
+                    <span th:if='${item.current}' th:text='${item.number}'>1</span>
+                    <a th:if='${not item.current}' th:href='@{${page.url}(page=${item.number-1},size=${page.size})}'><span th:text='${item.number}'>1</span></a>
+                </li>
+                <li th:class="${page.hasNextPage}? '' : 'disabled'">
+                    <span th:if='${not page.hasNextPage}'>»</span>
+                    <a th:if='${page.hasNextPage}' th:href='@{${page.url}(page=${page.number},size=${page.size})}' title='Go to next page'>»</a>
+                </li>
+                <li th:class="${page.lastPage}? 'disabled' : ''">
+                    <span th:if='${page.lastPage}'>Last →</span>
+                    <a th:if='${not page.lastPage}' th:href='@{${page.url}(page=${page.totalPages - 1},size=${page.size})}'>Last →</a>
+                </li>
+            </ul>
         </div>
     </div>
 </div>
