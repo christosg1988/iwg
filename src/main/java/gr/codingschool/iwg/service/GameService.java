@@ -3,7 +3,6 @@ package gr.codingschool.iwg.service;
 import gr.codingschool.iwg.model.Game;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
@@ -20,4 +19,8 @@ public interface GameService {
     List<Game> findAllGamesByOrderByPriceDesc();
     List<Game> findAllGamesByOrderByPrizeAsc();
     List<Game> findAllGamesByOrderByPrizeDesc();
+    List<Game> findAllGames();
+    Game findGameById(int id);
+    Game saveGame(Game game);
+    int deleteGameById(int id);
 }

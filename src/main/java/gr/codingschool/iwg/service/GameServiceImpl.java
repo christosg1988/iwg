@@ -4,12 +4,12 @@ import gr.codingschool.iwg.model.Game;
 import gr.codingschool.iwg.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 /**
@@ -75,9 +75,30 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public List<Game> findAllGamesByOrderByPriceDesc(){
+    public List<Game> findAllGamesByOrderByPriceDesc() {
         List<Game> listOfGames = new ArrayList<>(gameRepository.findAllByOrderByPriceDesc());
 
         return listOfGames;
+    }
+
+    public List<Game> findAllGames(){
+        return gameRepository.findAll();
+    }
+
+    @Override
+    public Game findGameById(int id){
+        return gameRepository.findById(id);
+    }
+
+    @Override
+    @Transactional
+    public Game saveGame(Game game){
+        return gameRepository.save(game);
+    }
+
+    @Override
+    @Transactional
+    public int deleteGameById(int id) {
+        return gameRepository.deleteById(id);
     }
 }

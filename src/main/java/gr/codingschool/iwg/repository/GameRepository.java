@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by christos_georgiadis on 10/04/2017.
  */
-@Repository("gameRepository")
+@Repository
 public interface GameRepository extends JpaRepository<Game, Long> {
     Page<Game> findAll(Pageable pageable);
     List<Game> findAllByOrderByNameAsc();
@@ -22,4 +22,8 @@ public interface GameRepository extends JpaRepository<Game, Long> {
     List<Game> findAllByOrderByPriceDesc();
     List<Game> findAllByOrderByPrizeAsc();
     List<Game> findAllByOrderByPrizeDesc();
+    List<Game> findAll();
+    Game findById(int id);
+    Game save(Game game);
+    int deleteById(int id);
 }
