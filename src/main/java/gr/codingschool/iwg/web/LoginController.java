@@ -5,22 +5,22 @@
  */
 package gr.codingschool.iwg.web;
 
+import gr.codingschool.iwg.model.Event;
 import gr.codingschool.iwg.model.LoginForm;
-import gr.codingschool.iwg.model.Role;
 import gr.codingschool.iwg.model.User;
-import gr.codingschool.iwg.repository.RoleRepository;
+import gr.codingschool.iwg.service.EventService;
 import gr.codingschool.iwg.service.SecurityService;
 import gr.codingschool.iwg.service.UserService;
-
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 /**
  *
@@ -34,16 +34,19 @@ public class LoginController {
     @Autowired
     private SecurityService securityService;
     @Autowired
-    private RoleRepository roleRepository;
+    private EventService eventService;
 
     @RequestMapping(value = {"/login"}, method = RequestMethod.GET)
-    public ModelAndView login(HttpSession session) {
+    public ModelAndView login(@RequestParam(required=false, defaultValue="false") Boolean successRegister, HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();
         if(session.getAttribute("user") != null){
             modelAndView.setViewName("redirect:/home");
         }
         else {
             LoginForm loginForm = new LoginForm();
+            if(successRegister)
+                modelAndView.addObject("successRegister", "You have been successfully registered!\n" +
+                        "Please login using the form below.");
             modelAndView.addObject("loginForm", loginForm);
             modelAndView.setViewName("login");
         }
@@ -62,6 +65,15 @@ public class LoginController {
         User existingUser = userService.authenticate(loginForm.getUsername(), loginForm.getPassword());
         if(existingUser == null)
         {
+            User failedUser = userService.findByUsername(loginForm.getUsername());
+            if(failedUser != null) {
+                Event loginEvent = new Event();
+                loginEvent.setUser(failedUser);
+                loginEvent.setType("Failed Login");
+                loginEvent.setInformation("The user failed to login");
+                eventService.save(loginEvent);
+            }
+
             modelAndView.addObject("successMessage", "Login unsuccessfull");
             modelAndView.setViewName("login");
             return modelAndView;
@@ -69,7 +81,12 @@ public class LoginController {
 
         securityService.authenticateUser(existingUser);
 
-        modelAndView.addObject("user",existingUser);
+        Event loginEvent = new Event();
+        loginEvent.setUser(existingUser);
+        loginEvent.setType("Login");
+        loginEvent.setInformation("The user logged in");
+        eventService.save(loginEvent);
+
         session.setAttribute("user", existingUser);
         modelAndView.setViewName("redirect:/home");
         return modelAndView;

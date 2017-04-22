@@ -1,6 +1,8 @@
 package gr.codingschool.iwg.web;
 
+import gr.codingschool.iwg.model.Event;
 import gr.codingschool.iwg.model.User;
+import gr.codingschool.iwg.service.EventService;
 import gr.codingschool.iwg.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +18,8 @@ public class RegisterController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private EventService eventService;
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public ModelAndView registration() {
@@ -39,9 +43,15 @@ public class RegisterController {
             modelAndView.setViewName("register");
         } else {
             userService.save(user);
-            modelAndView.addObject("successMessage", "User has been registered successfully");
-            modelAndView.addObject("user", new User());
-            modelAndView.setViewName("register");
+
+            Event registerEvent = new Event();
+            registerEvent.setUser(user);
+            registerEvent.setType("Registration");
+            registerEvent.setInformation("The user registered");
+            eventService.save(registerEvent);
+
+            modelAndView.addObject("successRegister", true);
+            modelAndView.setViewName("redirect:/login");
         }
         return modelAndView;
     }
