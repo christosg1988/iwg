@@ -3,6 +3,8 @@
  */
 
 $(document).ready(function(){
+    $('.selectpicker').selectpicker();
+
     $('#loginForm').on('submit', function(event){
         event.preventDefault();
 

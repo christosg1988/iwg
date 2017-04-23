@@ -40,7 +40,7 @@ public class LoginController {
     public ModelAndView login(@RequestParam(required=false, defaultValue="false") Boolean successRegister, HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();
         if(session.getAttribute("user") != null){
-            modelAndView.setViewName("redirect:/home");
+            modelAndView.setViewName("redirect:/games");
         }
         else {
             LoginForm loginForm = new LoginForm();
@@ -89,7 +89,7 @@ public class LoginController {
         eventService.save(loginEvent);
 
         session.setAttribute("user", existingUser);
-        modelAndView.setViewName("redirect:/home");
+        modelAndView.setViewName("redirect:/games");
         return modelAndView;
     }
 }
