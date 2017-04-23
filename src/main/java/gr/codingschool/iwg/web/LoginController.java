@@ -53,6 +53,7 @@ public class LoginController {
         return modelAndView;
     }
 
+    @SuppressWarnings("Duplicates")
     @RequestMapping(value = {"/login"}, method = RequestMethod.POST)
     public ModelAndView login(@Valid LoginForm loginForm, BindingResult bindingResult, HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();

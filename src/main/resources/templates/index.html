@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <title>Agile Actors IWG - Home</title>
-    <link rel="stylesheet" href="../static/css/main.css" th:href="@{css/main.css}" media="screen" />
+    <link rel="stylesheet"  type="text/css" th:href="@{css/main.css}" media="screen" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
-    <script src="../static/js/main.js">
+    <script type="text/javascript" th:src="@{js/games.js}">
     </script>
 </head>
 <body>
@@ -36,15 +37,14 @@
     </div>
 </nav>
 
-<label for="selection">Sort by</label>
-<div id="selection" class="btn-group bootstrap-select">
-    <select class="selectpicker" id="myselect" name="location" onchange="window.location='/home.html?id='+this.value+'&pos='+this.selectedIndex;" tabindex="-98">
-        <option>Name</option>
-        <option>Odds</option>
-        <option>Price</option>
-        <option>Prize</option>
-    </select>
-</div>
+
+<!--<div class="btn-group bootstrap-select">
+    <select class="selectpicker" id="myselect" name="location" th:onchange="${page.url} +'?order_by=' + this.value" tabindex="-98">
+    <option th:href="">Name</option>
+    <option>Odds</option>
+    <option>Price</option>
+    <option>Prize</option>
+</select></div>-->
 
 
 <div class="container" style="margin-bottom:20px; margin-top:20px;max-width:1200px;">
@@ -63,12 +63,55 @@
                     <li class="list-group-item"><i class="fa fa-check"></i> <span>Prize: </span><span th:text="${game.prize}"></span><span> &euro;</span></li>
                 </ul>
                 <div class="caption">
-                    <a href="#">
-                        <button type="button" class="btn btn-success">Play game</button>
-                    </a>
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal" >PLAY NOW</button>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content" >
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                    <h3 class="form-signin-heading" id="myModalLabel" style="color:cornsilk">Log in</h3>
+                </div> <!-- /.modal-header -->
+
+                <div class="modal-body">
+                    <form id="loginForm" role="form" enctype="multipart/form-data" method="POST" data-toggle="validator">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Username" name="username" id="username" required>
+                                <label class="input-group-addon glyphicon glyphicon-user"></label>
+                            </div>
+                        </div> <!-- /.form-group -->
+
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="password" class="form-control" placeholder="Password" name="password" id="password" minlength="5" required>
+                                <label class="input-group-addon glyphicon glyphicon-lock"></label>
+                            </div>
+                            <!-- /.input-group -->
+                        </div> <!-- /.form-group -->
+
+                        <div class="login">
+                            <button type="submit" class="btn btn-success">Login</button>
+                        </div>
+                        <div class="mtop10 mbottom10">
+                            <span class="failure-message t-center" id="failureMessage" hidden = "hidden">Login unsuccessful. Please try again!</span>
+                        </div>
+                    </form>
+
+                </div> <!-- /.modal-body -->
+
+                <div class="modal-footer">
+                        <span class="rj" style="color: white;">Δεν είσαι μέλος; <a href="/register" class="js-account-popup" style="text-decoration: underline;">Εγγραφή</a></span>
+                        <img src="../static/images/logo.png" th:src="@{/images/modalLogo.png}" class="img-responsive center-block" width="48" height="37" alt="Logo" align="right"/>
+                </div> <!-- /.modal-footer -->
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
     </div>
 
     <!-- Pagination Bar -->
