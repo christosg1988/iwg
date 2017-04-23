@@ -177,7 +177,24 @@
 		background-color: #ddd;
 		border-radius: 5px;
 	}
-	
+
+	.modal-header, .modal-footer, .modal-body {
+		border:1px #1C1C27;
+		background-color: #23232d !important;
+	}
+
+	.close{
+		text-align: center;
+		float: right;
+		color: cornsilk !important;
+		opacity: 1;
+	}
+
+	.rj{
+		float: left;
+		text-align: center;
+	}
+
 	a i:hover,
 	a i:active,
 	a i:focus
@@ -357,6 +374,10 @@
 
 	.mtop40 {
 		margin-top: 40px;
+	}
+
+	.mbottom10{
+		margin-bottom: 10px;
 	}
 	
 
