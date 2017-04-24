@@ -91,6 +91,7 @@ public class UserWalletController {
 
         modelAndView.addObject("unreadNotifications", unreadNotifications);
         modelAndView.addObject("user", user);
+        modelAndView.addObject("successMessage", "You have successfully added " + coupon.getValue() + " euros to your balance");
         modelAndView.addObject("wallet", user.getWallet());
         modelAndView.setViewName("user/panel/wallet");
         return modelAndView;
@@ -139,6 +140,7 @@ public class UserWalletController {
 
         modelAndView.addObject("unreadNotifications", unreadNotifications);
         modelAndView.addObject("user", user);
+        modelAndView.addObject("successMessage", "You have successfully withdrawn " + amount.getAmount() + " euros from your balance");
         modelAndView.addObject("wallet", user.getWallet());
         modelAndView.setViewName("user/panel/wallet");
         return modelAndView;

@@ -13,13 +13,13 @@
     <script type="text/javascript" charset="utf-8">
 $(document).ready(function() {
     // Setup - add a text input to each footer cell
-    $('#history tfoot th').each( function () {
+    $('#notifications tfoot th').each( function () {
         var title = $(this).text();
         $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
     } );
 
     // DataTable
-    var table = $('#history').DataTable();
+    var table = $('#notifications').DataTable();
 
     // Apply the search
     table.columns().every( function () {
@@ -64,12 +64,13 @@ $(document).ready(function() {
 
 <div class="container">
     <h3 style="color: cornsilk" class="form-signin-heading">Your incoming notifications</h3>
-    <table id="history" class="table white-bg">
+    <table id="notifications" class="table white-bg">
         <thead>
         <tr>
             <th class="text-left">Date</th>
             <th class="text-left">Notification message</th>
             <th class="text-left">Read</th>
+            <th class="text-left">Change status</th>
         </tr>
         </thead>
         <tfoot>
@@ -77,6 +78,7 @@ $(document).ready(function() {
             <th class="text-left">Date</th>
             <th class="text-left">Notification message</th>
             <th class="text-left">Read</th>
+            <th class="text-left">Change status</th>
         </tr>
         </tfoot>
         <tr th:each="notification : ${notifications}">
@@ -87,8 +89,6 @@ $(document).ready(function() {
                 <td th:case="true" class="text-left"><a th:href="@{/user/panel/notifications/unread(id=${notification.id})}" class="btn btn-success" role="button">Mark as unread</a></td>
                 <td th:case="false" class="text-left"><a th:href="@{/user/panel/notifications/read(id=${notification.id})}" class="btn btn-success" role="button">Mark as read</a></td>
             </div>
-
-
         </tr>
     </table>
 </div>
