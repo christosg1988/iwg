@@ -7,16 +7,17 @@ package gr.codingschool.iwg.service;
 
 import gr.codingschool.iwg.model.Role;
 import gr.codingschool.iwg.model.User;
+import gr.codingschool.iwg.model.UserWallet;
 import gr.codingschool.iwg.repository.RoleRepository;
 import gr.codingschool.iwg.repository.UserRepository;
+import gr.codingschool.iwg.repository.UserWalletRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
 
 /**
  *
@@ -27,6 +28,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserWalletRepository walletRepository;
     @Autowired
     private RoleRepository roleRepository;
     @Autowired
@@ -42,6 +45,60 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findAll(){ return userRepository.findAll(); }
+
+    @Override
+    public UserWallet initWalletForUser(String username){
+        UserWallet wallet = new UserWallet();
+        wallet.setBalance(0);
+        wallet = walletRepository.save(wallet);
+        User user = userRepository.findByUsername(username);
+        user.setWallet(wallet);
+        userRepository.save(user);
+        return wallet;
+    }
+
+    @Override
+    public UserWallet getWalletForUser(String username) {
+        User user = userRepository.findByUsername(username);
+        return user.getWallet();
+    }
+
+    @Override
+    public int getBalanceForUser(String username) {
+        User user = userRepository.findByUsername(username);
+        return user.getWallet().getBalance();
+    }
+
+    @Override
+    public Boolean addBalance(String username, int addedBalance) {
+        User user = userRepository.findByUsername(username);
+        UserWallet wallet = user.getWallet();
+        wallet.setBalance(wallet.getBalance() + addedBalance);
+        walletRepository.save(wallet);
+        return true;
+    }
+
+    @Override
+    public Boolean useBalanceIfAvailable(String username, int usedBalance) {
+        User user = userRepository.findByUsername(username);
+        UserWallet wallet = user.getWallet();
+        if(wallet.getBalance() < usedBalance)
+            return false;
+        wallet.setBalance(wallet.getBalance() - usedBalance);
+        walletRepository.save(wallet);
+        return true;
+    }
+
+    @Override
+    public Boolean withdrawBalance(String username, int withdrawnBalance) {
+        User user = userRepository.findByUsername(username);
+    UserWallet wallet = user.getWallet();
+        if(wallet.getBalance() < withdrawnBalance)
+            return false;
+        wallet.setBalance(wallet.getBalance() - withdrawnBalance);
+        walletRepository.save(wallet);
+        return true;
+    }
 
     @Override
     public User save(User user) {

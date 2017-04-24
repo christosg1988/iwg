@@ -8,6 +8,8 @@ import java.util.List;
 public interface NotificationService {
     List<Notification> findNotificationsByUser(User user);
     List<Notification> findUnreadNotificationsByUser(User user);
+    Notification readNotification(int id);
+    Notification unreadNotification(int id);
     Notification save(Notification notification);
     int delete(int id);
 }

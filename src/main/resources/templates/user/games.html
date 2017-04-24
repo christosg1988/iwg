@@ -25,11 +25,13 @@
     </div>
     <div id="navbarCollapse" class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
-            <li><a href="/games">Games</a></li>
-            <li><a href="#">Wallet</a></li>
+            <li><a href="/user/games">Games</a></li>
+            <li><a href="/user/panel">Control panel</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="#"><span class="glyphicon glyphicon-user"></span> <span th:utext="${user.username}"></span> </a></li>
+            <li><a href="/user/panel/wallet"><span class="glyphicon glyphicon-eur"></span> <span th:utext="${wallet.balance}"></span> </a></li>
+            <li><a href="/user/panel/notifications"><span class="glyphicon glyphicon-envelope"></span> <span th:utext="${unreadNotifications}"></span> </a></li>
             <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
         </ul>
     </div>
@@ -54,18 +56,17 @@
                 <div style="width: auto;">
                     <img style="height: 100px; margin: 0 auto" class="img-responsive" th:src="${game.image}" th:title="${game.name}" th:alt="${game.name}">
                 </div>
+                <div class="panel-body text-center">
+                    <p><strong th:text="${game.name}"></strong></p>
+                </div>
                 <ul class="list-group text-center">
                     <li class="list-group-item"><i class="fa fa-check"></i><span>Odds of winning: </span><span th:text="${game.odds}"></span><span> %</span></li>
                     <li class="list-group-item"><i class="fa fa-check"></i><span>Game price: </span><span th:text="${game.price}"></span><span> &euro;</span></li>
                     <li class="list-group-item"><i class="fa fa-check"></i> <span>Prize: </span><span th:text="${game.prize}"></span><span> &euro;</span></li>
                 </ul>
                 <div class="caption">
-                    <a href="#">
-                        <button type="button" class="btn btn-war">Try game</button>
-                    </a>
-                    <a href="#">
-                        <button type="button" class="btn btn-success">Play game</button>
-                    </a>
+                    <a href="#" class="btn btn-primary" role="button">Try game</a>
+                    <a href="#" class="btn btn-success" role="button">Play game</a>
                 </div>
             </div>
         </div>

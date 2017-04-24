@@ -5,27 +5,13 @@
  */
 package gr.codingschool.iwg.model;
 
-import java.sql.Date;
-import java.util.Collection;
-import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
+
+import javax.persistence.*;
+import java.sql.Date;
+import java.util.Set;
 
 /**
  *
@@ -75,6 +61,10 @@ public class User{
 
     @Column(name = "active")
     private int active;
+
+    @OneToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "wallet", referencedColumnName = "id")
+    private UserWallet wallet;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "userId", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "roleId", referencedColumnName = "id"))
@@ -155,6 +145,10 @@ public class User{
     public void setActive(int active) {
         this.active = active;
     }
+
+    public UserWallet getWallet(){ return wallet; }
+
+    public void setWallet(UserWallet wallet){ this.wallet = wallet; }
 
     public Set<Role> getRoles() {
         return roles;
