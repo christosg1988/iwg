@@ -2,7 +2,10 @@
  * Created by christos_georgiadis on 18/04/2017.
  */
 
+var game_id = 0;
+
 $(document).ready(function(){
+
     $('.selectpicker').selectpicker();
 
     $('#loginForm').on('submit', function(event){
@@ -19,13 +22,14 @@ $(document).ready(function(){
             data : JSON.stringify(search),
             timeout : 100000,
             success : function() {
-                window.location.href = "/user/games";
+                window.location.href = "/user/game?id=" + game_id;
             },
             error : function() {
                 $('#failureMessage').show();
             }
         });
     });
+
 
     $('#myModal').on('hidden.bs.modal', function () {
         $(this)
@@ -38,4 +42,9 @@ $(document).ready(function(){
     });
 
 });
+
+function getGameId(gameID){
+    game_id = gameID;
+}
+
 

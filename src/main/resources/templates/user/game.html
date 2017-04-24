@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:style="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>Agile Actors IWG - Game</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}" media="screen"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" th:src="@{../js/game.js}"></script>
+</head>
+
+<body>
+    <nav role="navigation" class="navbar navbar-inverse">
+        <div class="navbar-header">
+            <button type="button" data-target="#navbarCollapse" data-toggle="collapse" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="#" class="navbar-brand">IWG Agile Actors</a>
+        </div>
+        <div id="navbarCollapse" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/games">Games</a></li>
+                <li><a href="#">Wallet</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#"><span class="glyphicon glyphicon-user"></span> <span th:utext="${user.username}"></span> </a></li>
+                <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="intro-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="site-heading">
+                        <h1 th:text="${game.name}" style="color: white;;"></h1>
+                        <hr class="small">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section>
+        <div class="main-content" id="ocMaincontent" role="main">
+            <div>
+                <img style="margin: 0 auto; text-align: center;" class="img-responsive" th:src="${game.image}" th:title="${game.name}" th:alt="${game.name}">
+            </div>
+            <div style="text-align: center; padding: 20px;">
+                <h3 style="color:white">
+                    <span>Odds of winning: </span><span th:text="${game.odds}"></span><span> %</span>
+                </h3>
+                <h3 style="color:white">
+                    <span>Game price: </span><span th:text="${game.price}"></span><span> &euro;</span>
+                </h3>
+                <h3 style="color:white">
+                    <span>Prize: </span><span th:text="${game.prize}"></span><span> &euro;</span>
+                </h3>
+            </div>
+        </div>
+
+        <div id="gamePlay" style="display:none; height: 200px; color: white; border-top:1px solid #2f2b2a;">
+            <div id="loader"></div>
+
+            <div style="display:none; align-content: center" id="gameMessage" class="animate-bottom">
+                <h2>You win!!!!</h2>
+            </div>
+        </div>
+
+        <div style="padding: 10px">
+            <button id="tryButton" type="button" class="btn btn-info" th:onclick="'javascript:getGameId(\'' + ${game.id} + '\');'">Try Game</button>
+            <a th:href="@{'/user/game'(id=${game.id})}">
+                <button type="button" class="btn btn-success" >Play Game</button>
+            </a>
+        </div>
+        <div id="snackbar">You have no tries left...Play the game now!</div>
+    </section>
+</body>
+</html>

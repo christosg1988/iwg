@@ -2,18 +2,17 @@ package gr.codingschool.iwg.web;
 
 import com.sun.net.httpserver.Authenticator;
 import gr.codingschool.iwg.model.Event;
+import gr.codingschool.iwg.model.GameTries;
 import gr.codingschool.iwg.model.LoginForm;
 import gr.codingschool.iwg.model.User;
 import gr.codingschool.iwg.service.EventService;
+import gr.codingschool.iwg.service.GameTriesService;
 import gr.codingschool.iwg.service.SecurityService;
 import gr.codingschool.iwg.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -28,6 +27,8 @@ public class AjaxController {
     private SecurityService securityService;
     @Autowired
     private EventService eventService;
+    @Autowired
+    private GameTriesService gameTriesService;
 
     @SuppressWarnings("Duplicates")
     @RequestMapping(value = {"/modalLogin"})
@@ -60,5 +61,37 @@ public class AjaxController {
         session.setAttribute("user", existingUser);
 
         return new ResponseEntity<Authenticator.Success>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = {"/user/play"}, produces = "application/json")
+    public @ResponseBody int getGameTriesPerUserViaAjax(@RequestParam("gameId") int gameId, HttpSession session){
+        User loggedInUser = (User) session.getAttribute("user");
+
+        GameTries foundGameTries = gameTriesService.findTriesByUserIdAndGameId(loggedInUser.getId(), gameId);
+
+        if(foundGameTries != null){
+
+            foundGameTries.setTries(foundGameTries.getTries() - 1);
+
+            if(foundGameTries.getTries() == 0){
+                return 0;
+            }
+            else{
+                GameTries savedGameTries = gameTriesService.save(foundGameTries);
+
+                return savedGameTries.getTries();
+            }
+        }
+        else {
+            GameTries gameTries = new GameTries();
+            gameTries.setGameId(gameId);
+            gameTries.setUserId(loggedInUser.getId());
+            gameTries.setTries(3);
+
+            GameTries savedGameTries = gameTriesService.save(gameTries);
+
+            return savedGameTries.getTries();
+        }
+
     }
 }

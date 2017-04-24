@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Agile Actors IWG - User</title>
+    <title>Agile Actors IWG - Games</title>
     <link rel="stylesheet" type="text/css" href="../../static/css/main.css" th:href="@{../css/main.css}" media="screen" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
@@ -60,11 +60,8 @@
                     <li class="list-group-item"><i class="fa fa-check"></i> <span>Prize: </span><span th:text="${game.prize}"></span><span> &euro;</span></li>
                 </ul>
                 <div class="caption">
-                    <a href="#">
-                        <button type="button" class="btn btn-war">Try game</button>
-                    </a>
-                    <a href="#">
-                        <button type="button" class="btn btn-success">Play game</button>
+                    <a th:href="@{'/user/game'(id=${game.id})}">
+                        <button type="button" class="btn btn-warning">Learn more</button>
                     </a>
                 </div>
             </div>

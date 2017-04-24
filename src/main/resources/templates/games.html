@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-    <title>Agile Actors IWG - Home</title>
+    <title>Agile Actors IWG - Games</title>
     <link rel="stylesheet"  type="text/css" th:href="@{css/main.css}" media="screen" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
@@ -63,7 +63,7 @@
                     <li class="list-group-item"><i class="fa fa-check"></i> <span>Prize: </span><span th:text="${game.prize}"></span><span> &euro;</span></li>
                 </ul>
                 <div class="caption">
-                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal" >PLAY NOW</button>
+                    <button type="button" id="btn_learn_more" class="btn btn-warning" data-toggle="modal" data-target="#myModal" th:onclick="'javascript:getGameId(\'' + ${game.id} + '\');'">Learn more</button>
                 </div>
             </div>
         </div>
