@@ -1,14 +1,8 @@
 package gr.codingschool.iwg.web;
 
 import com.sun.net.httpserver.Authenticator;
-import gr.codingschool.iwg.model.Event;
-import gr.codingschool.iwg.model.GameTries;
-import gr.codingschool.iwg.model.LoginForm;
-import gr.codingschool.iwg.model.User;
-import gr.codingschool.iwg.service.EventService;
-import gr.codingschool.iwg.service.GameTriesService;
-import gr.codingschool.iwg.service.SecurityService;
-import gr.codingschool.iwg.service.UserService;
+import gr.codingschool.iwg.model.*;
+import gr.codingschool.iwg.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +23,8 @@ public class AjaxController {
     private EventService eventService;
     @Autowired
     private GameTriesService gameTriesService;
+    @Autowired
+    private GameService gameService;
 
     @SuppressWarnings("Duplicates")
     @RequestMapping(value = {"/modalLogin"})
@@ -67,6 +63,7 @@ public class AjaxController {
     public @ResponseBody int getGameTriesPerUserViaAjax(@RequestParam("gameId") int gameId, HttpSession session){
         User loggedInUser = (User) session.getAttribute("user");
 
+        System.out.println(gameId);
         GameTries foundGameTries = gameTriesService.findTriesByUserIdAndGameId(loggedInUser.getId(), gameId);
 
         if(foundGameTries != null){
@@ -83,9 +80,11 @@ public class AjaxController {
             }
         }
         else {
+            Game game = gameService.findGameById(gameId);
+
             GameTries gameTries = new GameTries();
-            gameTries.setGameId(gameId);
-            gameTries.setUserId(loggedInUser.getId());
+            gameTries.setGame(game);
+            gameTries.setUser(loggedInUser);
             gameTries.setTries(3);
 
             GameTries savedGameTries = gameTriesService.save(gameTries);

@@ -1,25 +1,27 @@
 package gr.codingschool.iwg.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by christos_georgiadis on 24/04/2017.
  */
 @Entity
 @Table(name = "games_tries")
-public class GameTries {
-
+public class GameTries{
     @Id
     @SequenceGenerator(name = "game_tries_id_seq", sequenceName = "game_tries_id_seq")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "game_tries_id_seq")
     @Column(name = "id", nullable = false)
     private int id;
 
-    @Column(name = "userId")
-    private int userId;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "userId", referencedColumnName = "id")
+    private User user;
 
-    @Column(name = "gameId")
-    private int gameId;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "gameId", referencedColumnName = "id")
+    private Game game;
 
     @Column(name = "tries")
     private int tries;
@@ -32,20 +34,20 @@ public class GameTries {
         this.id = id;
     }
 
-    public int getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public int getGameId() {
-        return gameId;
+    public Game getGame() {
+        return game;
     }
 
-    public void setGameId(int gameId) {
-        this.gameId = gameId;
+    public void setGame(Game game) {
+        this.game = game;
     }
 
     public int getTries() {

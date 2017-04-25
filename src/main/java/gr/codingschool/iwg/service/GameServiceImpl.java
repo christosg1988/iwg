@@ -26,66 +26,6 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public List<Game> findAllGamesByOrderByOddsAsc(){
-        List<Game> listOfGames = new ArrayList<>(gameRepository.findAllByOrderByOddsAsc());
-
-        return listOfGames;
-    }
-
-    @Override
-    public List<Game> findAllGamesByOrderByOddsDesc(){
-        List<Game> listOfGames = new ArrayList<>(gameRepository.findAllByOrderByOddsDesc());
-
-        return listOfGames;
-    }
-
-    @Override
-    public List<Game> findAllGamesByOrderByPrizeAsc(){
-        List<Game> listOfGames = new ArrayList<>(gameRepository.findAllByOrderByPrizeAsc());
-
-        return listOfGames;
-    }
-
-    @Override
-    public List<Game> findAllGamesByOrderByPrizeDesc(){
-        List<Game> listOfGames = new ArrayList<>(gameRepository.findAllByOrderByPrizeDesc());
-
-        return listOfGames;
-    }
-
-    @Override
-    public List<Game> findAllGamesByOrderByNameAsc(){
-        List<Game> listOfGames = new ArrayList<>(gameRepository.findAllByOrderByNameAsc());
-
-        return listOfGames;
-    }
-
-    @Override
-    public List<Game> findAllGamesByOrderByNameDesc(){
-        List<Game> listOfGames = new ArrayList<>(gameRepository.findAllByOrderByNameDesc());
-
-        return listOfGames;
-    }
-
-    @Override
-    public List<Game> findAllGamesByOrderByPriceAsc(){
-        List<Game> listOfGames = new ArrayList<>(gameRepository.findAllByOrderByPriceAsc());
-
-        return listOfGames;
-    }
-
-    @Override
-    public List<Game> findAllGamesByOrderByPriceDesc() {
-        List<Game> listOfGames = new ArrayList<>(gameRepository.findAllByOrderByPriceDesc());
-
-        return listOfGames;
-    }
-
-    public List<Game> findAllGames(){
-        return gameRepository.findAll();
-    }
-
-    @Override
     public Game findGameById(int id){
         return gameRepository.findById(id);
     }

@@ -74,7 +74,7 @@
         </div>
 
         <div style="padding: 10px">
-            <button id="tryButton" type="button" class="btn btn-info" th:onclick="'javascript:getGameId(\'' + ${game.id} + '\');'">Try Game</button>
+            <button id="tryButton" type="button" class="btn btn-info"  th:object="${game}" th:onclick="'javascript:getGameId(\'' + ${game.id} + '\');'">Try Game</button>
             <a th:href="@{'/user/game'(id=${game.id})}">
                 <button type="button" class="btn btn-success" >Play Game</button>
             </a>
