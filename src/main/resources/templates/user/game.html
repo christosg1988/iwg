@@ -24,11 +24,13 @@
         </div>
         <div id="navbarCollapse" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li><a href="/games">Games</a></li>
-                <li><a href="#">Wallet</a></li>
+                <li><a href="/user/games">Games</a></li>
+                <li><a href="/user/panel">Control panel</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="#"><span class="glyphicon glyphicon-user"></span> <span th:utext="${user.username}"></span> </a></li>
+                <li><a href="/user/panel/wallet"><span class="glyphicon glyphicon-eur"></span> <span id="balance" th:utext="${wallet.balance}"></span> </a></li>
+                <li><a href="/user/panel/notifications"><span class="glyphicon glyphicon-envelope"></span> <span th:utext="${unreadNotifications}"></span> </a></li>
                 <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
             </ul>
         </div>
@@ -65,19 +67,17 @@
             </div>
         </div>
 
-        <div id="gamePlay" style="display:none; height: 200px; color: white; border-top:1px solid #2f2b2a;">
+        <div id="gamePlay" style="display:none; text-align:center; height: 200px; color: white; border-top:1px solid #2f2b2a;">
             <div id="loader"></div>
 
             <div style="display:none; align-content: center" id="gameMessage" class="animate-bottom">
-                <h2>You win!!!!</h2>
+                <h2 id="gameResult"></h2>
             </div>
         </div>
 
-        <div style="padding: 10px">
-            <button id="tryButton" type="button" class="btn btn-info"  th:object="${game}" th:onclick="'javascript:getGameId(\'' + ${game.id} + '\');'">Try Game</button>
-            <a th:href="@{'/user/game'(id=${game.id})}">
-                <button type="button" class="btn btn-success" >Play Game</button>
-            </a>
+        <div style="padding: 10px; text-align:center;">
+            <button id="tryButton" type="button" class="btn btn-info" th:onclick="'javascript:getGameId(\'' + ${game.id} + '\');'">Try Game</button>
+            <button id="playButton" type="button" class="btn btn-success" th:onclick="'javascript:getGameId(\'' + ${game.id} + '\');'">Play Game</button>
         </div>
         <div id="snackbar">You have no tries left...Play the game now!</div>
     </section>

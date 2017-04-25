@@ -3,6 +3,8 @@ package gr.codingschool.iwg.web.user;
 import gr.codingschool.iwg.model.Game;
 import gr.codingschool.iwg.model.User;
 import gr.codingschool.iwg.service.GameService;
+import gr.codingschool.iwg.service.NotificationService;
+import gr.codingschool.iwg.service.UserService;
 import gr.codingschool.iwg.web.PageWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,16 +24,25 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class GameController {
     @Autowired
-    GameService gameService;
+    private GameService gameService;
+    @Autowired
+    private NotificationService notificationService;
+    @Autowired
+    private UserService userService;
 
     @RequestMapping(value = {"/user/game"}, method = RequestMethod.GET)
     public ModelAndView home(@RequestParam("id") int id , HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();
+
         User loggedInUser = (User) session.getAttribute("user");
-        modelAndView.addObject("user", loggedInUser);
+        int unreadNotifications = notificationService.findUnreadNotificationsByUser(loggedInUser).size();
+        User user = userService.findByUsername(loggedInUser.getUsername());
 
         Game game = gameService.findGameById(id);
 
+        modelAndView.addObject("user", user);
+        modelAndView.addObject("unreadNotifications", unreadNotifications);
+        modelAndView.addObject("wallet", user.getWallet());
         modelAndView.addObject("game", game);
 
         modelAndView.setViewName("user/game");

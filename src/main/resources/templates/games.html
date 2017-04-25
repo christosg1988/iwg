@@ -57,9 +57,6 @@
                 <div style="width: auto;">
                     <img style="height: 100px; margin: 0 auto" class="img-responsive" th:src="${game.image}" th:title="${game.name}" th:alt="${game.name}">
                 </div>
-                <div class="panel-body text-center">
-                    <p><strong th:text="${game.name}"></strong></p>
-                </div>
                 <ul class="list-group text-center">
                     <li class="list-group-item"><i class="fa fa-check"></i><span>Odds of winning: </span><span th:text="${game.odds}"></span><span> %</span></li>
                     <li class="list-group-item"><i class="fa fa-check"></i><span>Game price: </span><span th:text="${game.price}"></span><span> &euro;</span></li>
