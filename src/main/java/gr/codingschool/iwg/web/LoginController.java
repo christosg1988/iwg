@@ -7,8 +7,10 @@ package gr.codingschool.iwg.web;
 
 import gr.codingschool.iwg.model.Event;
 import gr.codingschool.iwg.model.LoginForm;
+import gr.codingschool.iwg.model.Notification;
 import gr.codingschool.iwg.model.User;
 import gr.codingschool.iwg.service.EventService;
+import gr.codingschool.iwg.service.NotificationService;
 import gr.codingschool.iwg.service.SecurityService;
 import gr.codingschool.iwg.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  *
@@ -35,6 +38,8 @@ public class LoginController {
     private SecurityService securityService;
     @Autowired
     private EventService eventService;
+    @Autowired
+    private NotificationService notificationService;
 
     @RequestMapping(value = {"/login"}, method = RequestMethod.GET)
     public ModelAndView login(@RequestParam(required=false, defaultValue="false") Boolean successRegister, HttpSession session) {
@@ -81,6 +86,8 @@ public class LoginController {
         }
 
         securityService.authenticateUser(existingUser);
+        existingUser = userService.findByUsername(existingUser.getUsername());
+        List<Notification> notifications = notificationService.findNotificationsByUser(existingUser);
 
         Event loginEvent = new Event();
         loginEvent.setUser(existingUser);
@@ -89,6 +96,7 @@ public class LoginController {
         eventService.save(loginEvent);
 
         session.setAttribute("user", existingUser);
+        session.setAttribute("notifications", notifications);
         modelAndView.setViewName("redirect:/games");
         return modelAndView;
     }

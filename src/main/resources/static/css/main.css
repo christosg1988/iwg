@@ -246,10 +246,10 @@
 
 	.panel-body {
 		background-color: #f0f0f0;
-		font-size: 40px;
+		font-size: 20px;
 		color: #777777;
 		padding: 20px;
-		margin: 0px;
+		margin: 0;
 	}
 
 	#ocMainContent {

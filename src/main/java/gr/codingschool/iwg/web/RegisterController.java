@@ -44,6 +44,8 @@ public class RegisterController {
         } else {
             userService.save(user);
 
+            userService.initWalletForUser(user.getUsername());
+
             Event registerEvent = new Event();
             registerEvent.setUser(user);
             registerEvent.setType("Registration");

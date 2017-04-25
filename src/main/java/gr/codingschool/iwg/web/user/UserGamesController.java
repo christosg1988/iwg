@@ -4,6 +4,8 @@ import gr.codingschool.iwg.model.Game;
 import gr.codingschool.iwg.model.SortedOption;
 import gr.codingschool.iwg.model.User;
 import gr.codingschool.iwg.service.GameService;
+import gr.codingschool.iwg.service.NotificationService;
+import gr.codingschool.iwg.service.UserService;
 import gr.codingschool.iwg.web.PageWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,16 +26,24 @@ public class UserGamesController {
 
     @Autowired
     private GameService gameService;
+    @Autowired
+    private NotificationService notificationService;
+    @Autowired
+    private UserService userService;
 
     @RequestMapping(value = {"/user", "/user/games"}, method = RequestMethod.GET)
     public ModelAndView home(@SortDefault(value = "name") Pageable pageable, HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();
         User loggedInUser = (User) session.getAttribute("user");
-        modelAndView.addObject("user", loggedInUser);
+        int unreadNotifications = notificationService.findUnreadNotificationsByUser(loggedInUser).size();
+        User user = userService.findByUsername(loggedInUser.getUsername());
+
+        modelAndView.addObject("unreadNotifications", unreadNotifications);
+        modelAndView.addObject("user", user);
+        modelAndView.addObject("wallet", user.getWallet());
 
         Page<Game> gamePage = gameService.findAllGames(pageable);
         PageWrapper<Game> page = new PageWrapper<Game>(gamePage, "/user/games");
-
 
         modelAndView.addObject("selected", findSelectedOption(pageable));
         modelAndView.addObject("sortedOptions", createSortedOptions());
