@@ -3,6 +3,8 @@
  */
 
 var game_id = 0;
+var game_price = 0;
+var wallet_balance = 0;
 
 $(document).ready(function(){
     $('#tryButton').click(function() {
@@ -16,9 +18,8 @@ $(document).ready(function(){
                 var result = parseInt(data);
 
                 if(result == 0){
-                    var x = document.getElementById("snackbar")
-                    x.className = "show";
-                    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+                    var text = 'You have no tries left...Play the game now!';
+                    showSnackbar(text);
                 }
                 else{
                     $('#gamePlay').show(500);
@@ -50,24 +51,40 @@ $(document).ready(function(){
             data : 'gameId=' + game_id,
             dataType: "json",
             timeout : 100000,
+            status: 200,
             success : function(data) {
+                if(data['enoughBalance']){
+                    document.getElementById("balance").innerHTML = (wallet_balance - game_price).toString();
 
-                $('#gamePlay').show(500);
+                    $('#gamePlay').show(500);
 
-                if($('#gameMessage').is(":visible")){
-                    hidePage();
+                    if($('#gameMessage').is(":visible")){
+                        hidePage();
+                    }
+
+                    setTimeout(function() {showGameResultAndUpdateBalance(data['result'], data['balance'])}, 3000);
+
+                    $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+                }
+                else{
+                    var text = 'Your balance is not enough for this game. Increase your balance now or play another game!';
+                    showSnackbar(text);
                 }
 
-                setTimeout(function() {showGameResultAndUpdateBalance(data['flag'], data['balance'])}, 3000);
-
-                $("html, body").animate({ scrollTop: $(document).height() }, "slow");
             },
-            error : function() {
-
+            error : function(status) {
+                console.log(status.status);
             }
         });
     });
 });
+
+function showSnackbar(text){
+    var x = document.getElementById("snackbar");
+    x.innerHTML = text;
+    x.className = "show";
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
 
 function showWinPage() {
     document.getElementById("loader").style.display = "none";
@@ -87,7 +104,7 @@ function showGameResultAndUpdateBalance(result, balance) {
     document.getElementById("loader").style.display = "none";
     document.getElementById("gameMessage").style.display = "block";
 
-    if(result == 1){
+    if(result){
         document.getElementById("gameResult").innerHTML = "You win!!!"
     }
     else{
@@ -100,6 +117,12 @@ function showGameResultAndUpdateBalance(result, balance) {
 function hidePage() {
     document.getElementById("loader").style.display = "block";
     document.getElementById("gameMessage").style.display = "none";
+}
+
+function getInfo(gameID, gamePrice, walletBalance){
+    game_id = gameID;
+    game_price = gamePrice;
+    wallet_balance = parseInt(walletBalance);
 }
 
 function getGameId(gameID){

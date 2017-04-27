@@ -4,15 +4,16 @@ package gr.codingschool.iwg.model;
  * Created by christos_georgiadis on 26/04/2017.
  */
 public class GameResult {
-    private int flag;
+    private boolean result;
     private int balance;
+    private boolean enoughBalance;
 
-    public int getFlag() {
-        return flag;
+    public boolean getResult() {
+        return result;
     }
 
-    public void setFlag(int flag) {
-        this.flag = flag;
+    public void setResult(boolean result) {
+        this.result = result;
     }
 
     public int getBalance() {
@@ -21,5 +22,13 @@ public class GameResult {
 
     public void setBalance(int balance) {
         this.balance = balance;
+    }
+
+    public boolean getEnoughBalance() {
+        return enoughBalance;
+    }
+
+    public void setEnoughBalance(boolean enoughBalance) {
+        this.enoughBalance = enoughBalance;
     }
 }

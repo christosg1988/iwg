@@ -29,6 +29,8 @@ public class AjaxController {
     @Autowired
     private UserWalletService userWalletService;
 
+    private static final int NUMBER_OF_TRIES = 2;
+
     @SuppressWarnings("Duplicates")
     @RequestMapping(value = {"/modalLogin"})
     public ResponseEntity getSearchResultViaAjax(@RequestBody LoginForm loginForm, HttpSession session) {
@@ -69,17 +71,16 @@ public class AjaxController {
         GameTries foundGameTries = gameTriesService.findTriesByUserIdAndGameId(loggedInUser.getId(), gameId);
 
         if(foundGameTries != null){
-
-            foundGameTries.setTries(foundGameTries.getTries() - 1);
-
             if(foundGameTries.getTries() == 0){
                 return 0;
             }
             else{
+                foundGameTries.setTries(foundGameTries.getTries() - 1);
+
                 GameTries savedGameTries = gameTriesService.save(foundGameTries);
                 Game game = gameService.findGameById(gameId);
 
-                return findRandomOdds(game.getOdds());
+                return findRandomOddsForTryingMode(game.getOdds());
             }
         }
         else {
@@ -88,11 +89,11 @@ public class AjaxController {
             GameTries gameTries = new GameTries();
             gameTries.setGame(game);
             gameTries.setUser(loggedInUser);
-            gameTries.setTries(3);
+            gameTries.setTries(NUMBER_OF_TRIES);
 
             GameTries savedGameTries = gameTriesService.save(gameTries);
 
-            return findRandomOdds(game.getOdds());
+            return findRandomOddsForTryingMode(game.getOdds());
         }
 
     }
@@ -102,16 +103,36 @@ public class AjaxController {
         User loggedInUser = (User) session.getAttribute("user");
         Game game = gameService.findGameById(gameId);
 
-        int result = findRandomOdds(game.getOdds());
+        boolean isBalanced = hasEnoughBalance(loggedInUser, game);
 
-        GameResult gameResult = new GameResult();
-        gameResult.setFlag(result);
-        gameResult.setBalance(calculateAndUpdateBalance(result, loggedInUser, game));
+        if(isBalanced) {
+            boolean isAWin = findRandomOddsForPlayingMode(game.getOdds());
 
-        return new ResponseEntity<GameResult>(gameResult, HttpStatus.OK);
+            GameResult gameResult = new GameResult();
+            gameResult.setEnoughBalance(true);
+            gameResult.setResult(isAWin);
+            gameResult.setBalance(calculateAndUpdateBalance(isAWin, loggedInUser, game));
+
+            return new ResponseEntity<>(gameResult, HttpStatus.OK);
+        }
+        else {
+            GameResult gameResult = new GameResult();
+            gameResult.setEnoughBalance(false);
+            gameResult.setResult(false);
+            return new ResponseEntity<>(gameResult,  HttpStatus.OK);
+        }
     }
 
-    private int findRandomOdds(int odds){
+    private boolean findRandomOddsForPlayingMode(int odds){
+        Random myRandom = new Random( System.currentTimeMillis() );
+        int randomInt = myRandom.nextInt(100) + 1;
+
+        System.out.println(randomInt);
+
+        return (randomInt <= odds);
+    }
+
+    private int findRandomOddsForTryingMode(int odds){
         Random myRandom = new Random( System.currentTimeMillis() );
         int randomInt = myRandom.nextInt(100) + 1;
 
@@ -125,10 +146,14 @@ public class AjaxController {
         }
     }
 
-    private int calculateAndUpdateBalance(int result, User user, Game game){
+    private boolean hasEnoughBalance(User user, Game game){
+        return ((user.getWallet().getBalance()) >= (game.getPrice()));
+    }
+
+    private int calculateAndUpdateBalance(boolean isWin, User user, Game game){
         int newBalance;
 
-        if(result == 1){
+        if(isWin){
             newBalance = user.getWallet().getBalance() + (game.getPrize() - game.getPrice());
         }
         else{

@@ -56,7 +56,7 @@
             </div>
             <div style="text-align: center; padding: 20px;">
                 <h3 style="color:white">
-                    <span>Odds of winning: </span><span th:text="${game.odds}"></span><span> %</span>
+                    <span>Odds of result: </span><span th:text="${game.odds}"></span><span> %</span>
                 </h3>
                 <h3 style="color:white">
                     <span>Game price: </span><span th:text="${game.price}"></span><span> &euro;</span>
@@ -76,10 +76,10 @@
         </div>
 
         <div style="padding: 10px; text-align:center;">
-            <button id="tryButton" type="button" class="btn btn-info" th:onclick="'javascript:getGameId(\'' + ${game.id} + '\');'">Try Game</button>
-            <button id="playButton" type="button" class="btn btn-success" th:onclick="'javascript:getGameId(\'' + ${game.id} + '\');'">Play Game</button>
+            <button id="tryButton" type="button" class="btn btn-info" th:onclick="'javascript:getGameId(\'' + ${game.id} + '\' );'">Try Game</button>
+            <button id="playButton" type="button" class="btn btn-success" th:onclick="'javascript:getInfo(\'' + ${game.id} + '\', \'' + ${game.price} + '\', \'' + ${wallet.balance} + '\');'">Play Game</button>
         </div>
-        <div id="snackbar">You have no tries left...Play the game now!</div>
+        <div id="snackbar"></div>
     </section>
 </body>
 </html>
