@@ -78,6 +78,7 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    @SuppressWarnings("Duplicates")
     @Override
     public Boolean useBalanceIfAvailable(String username, int usedBalance) {
         User user = userRepository.findByUsername(username);
@@ -89,6 +90,7 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    @SuppressWarnings("Duplicates")
     @Override
     public Boolean withdrawBalance(String username, int withdrawnBalance) {
         User user = userRepository.findByUsername(username);

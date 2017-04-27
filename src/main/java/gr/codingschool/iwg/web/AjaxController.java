@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.Random;
 
 /**
  * Created by christos_georgiadis on 23/04/2017.
@@ -25,6 +26,10 @@ public class AjaxController {
     private GameTriesService gameTriesService;
     @Autowired
     private GameService gameService;
+    @Autowired
+    private UserWalletService userWalletService;
+
+    private static final int NUMBER_OF_TRIES = 2;
 
     @SuppressWarnings("Duplicates")
     @RequestMapping(value = {"/modalLogin"})
@@ -59,24 +64,23 @@ public class AjaxController {
         return new ResponseEntity<Authenticator.Success>(HttpStatus.OK);
     }
 
-    @RequestMapping(value = {"/user/play"}, produces = "application/json")
+    @RequestMapping(value = {"/user/try"}, produces = "application/json")
     public @ResponseBody int getGameTriesPerUserViaAjax(@RequestParam("gameId") int gameId, HttpSession session){
         User loggedInUser = (User) session.getAttribute("user");
 
-        System.out.println(gameId);
         GameTries foundGameTries = gameTriesService.findTriesByUserIdAndGameId(loggedInUser.getId(), gameId);
 
         if(foundGameTries != null){
-
-            foundGameTries.setTries(foundGameTries.getTries() - 1);
-
             if(foundGameTries.getTries() == 0){
                 return 0;
             }
             else{
-                GameTries savedGameTries = gameTriesService.save(foundGameTries);
+                foundGameTries.setTries(foundGameTries.getTries() - 1);
 
-                return savedGameTries.getTries();
+                GameTries savedGameTries = gameTriesService.save(foundGameTries);
+                Game game = gameService.findGameById(gameId);
+
+                return findRandomOddsForTryingMode(game.getOdds());
             }
         }
         else {
@@ -85,12 +89,82 @@ public class AjaxController {
             GameTries gameTries = new GameTries();
             gameTries.setGame(game);
             gameTries.setUser(loggedInUser);
-            gameTries.setTries(3);
+            gameTries.setTries(NUMBER_OF_TRIES);
 
             GameTries savedGameTries = gameTriesService.save(gameTries);
 
-            return savedGameTries.getTries();
+            return findRandomOddsForTryingMode(game.getOdds());
         }
 
+    }
+
+    @RequestMapping(value = {"/user/play"})
+    public ResponseEntity<GameResult> playGameViaAjax(@RequestParam("gameId") int gameId, HttpSession session){
+        User loggedInUser = (User) session.getAttribute("user");
+        Game game = gameService.findGameById(gameId);
+
+        boolean isBalanced = hasEnoughBalance(loggedInUser, game);
+
+        if(isBalanced) {
+            boolean isAWin = findRandomOddsForPlayingMode(game.getOdds());
+
+            GameResult gameResult = new GameResult();
+            gameResult.setEnoughBalance(true);
+            gameResult.setResult(isAWin);
+            gameResult.setBalance(calculateAndUpdateBalance(isAWin, loggedInUser, game));
+
+            return new ResponseEntity<>(gameResult, HttpStatus.OK);
+        }
+        else {
+            GameResult gameResult = new GameResult();
+            gameResult.setEnoughBalance(false);
+            gameResult.setResult(false);
+            return new ResponseEntity<>(gameResult,  HttpStatus.OK);
+        }
+    }
+
+    private boolean findRandomOddsForPlayingMode(int odds){
+        Random myRandom = new Random( System.currentTimeMillis() );
+        int randomInt = myRandom.nextInt(100) + 1;
+
+        System.out.println(randomInt);
+
+        return (randomInt <= odds);
+    }
+
+    private int findRandomOddsForTryingMode(int odds){
+        Random myRandom = new Random( System.currentTimeMillis() );
+        int randomInt = myRandom.nextInt(100) + 1;
+
+        System.out.println(randomInt);
+
+        if(randomInt <= odds){
+            return 1;
+        }
+        else{
+            return -1;
+        }
+    }
+
+    private boolean hasEnoughBalance(User user, Game game){
+        return ((user.getWallet().getBalance()) >= (game.getPrice()));
+    }
+
+    private int calculateAndUpdateBalance(boolean isWin, User user, Game game){
+        int newBalance;
+
+        if(isWin){
+            newBalance = user.getWallet().getBalance() + (game.getPrize() - game.getPrice());
+        }
+        else{
+            newBalance = user.getWallet().getBalance() - game.getPrice();
+        }
+
+        UserWallet userWallet = user.getWallet();
+        userWallet.setBalance(newBalance);
+
+        userWalletService.save(userWallet);
+
+        return userWallet.getBalance();
     }
 }
