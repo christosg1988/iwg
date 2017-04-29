@@ -1,6 +1,8 @@
 package gr.codingschool.iwg.web.user;
 
+import gr.codingschool.iwg.model.Event;
 import gr.codingschool.iwg.model.user.User;
+import gr.codingschool.iwg.service.EventService;
 import gr.codingschool.iwg.service.NotificationService;
 import gr.codingschool.iwg.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ public class EditDetailsController {
     private NotificationService notificationService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private EventService eventService;
 
     @RequestMapping(value = {"/user/details"}, method = RequestMethod.GET)
     public ModelAndView userDetails(HttpSession session) {
@@ -49,6 +53,13 @@ public class EditDetailsController {
         User updatedUser = userService.updateUser(loggedInUser);
 
         int unreadNotifications = notificationService.findUnreadNotificationsByUser(updatedUser).size();
+
+        Event editDetailsEvent = new Event();
+        editDetailsEvent.setUser(updatedUser);
+        editDetailsEvent.setType("Edit Details");
+        editDetailsEvent.setInformation("The user changed his/her details");
+        eventService.save(editDetailsEvent);
+
         modelAndView.addObject("unreadNotifications", unreadNotifications);
         modelAndView.addObject("user", updatedUser);
         modelAndView.addObject("wallet", updatedUser.getWallet());
