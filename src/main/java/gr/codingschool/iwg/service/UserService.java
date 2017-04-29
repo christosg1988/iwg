@@ -96,6 +96,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     public User updateUser(User user) {
         return userRepository.save(user);
     }

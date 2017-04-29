@@ -1,9 +1,8 @@
 package gr.codingschool.iwg.web.admin;
 
 import gr.codingschool.iwg.model.Event;
-import gr.codingschool.iwg.model.Game;
 import gr.codingschool.iwg.model.Notification;
-import gr.codingschool.iwg.model.User;
+import gr.codingschool.iwg.model.user.User;
 import gr.codingschool.iwg.service.EventService;
 import gr.codingschool.iwg.service.NotificationService;
 import gr.codingschool.iwg.service.UserService;
@@ -18,7 +17,7 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
-public class NotificationsController {
+public class AdminNotificationsController {
     @Autowired
     private UserService userService;
     @Autowired

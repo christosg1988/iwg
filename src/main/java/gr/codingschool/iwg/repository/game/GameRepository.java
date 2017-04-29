@@ -1,12 +1,10 @@
-package gr.codingschool.iwg.repository;
+package gr.codingschool.iwg.repository.game;
 
-import gr.codingschool.iwg.model.Game;
+import gr.codingschool.iwg.model.game.Game;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  * Created by christos_georgiadis on 10/04/2017.

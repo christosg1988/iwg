@@ -1,7 +1,7 @@
 package gr.codingschool.iwg.repository;
 
 import gr.codingschool.iwg.model.Notification;
-import gr.codingschool.iwg.model.User;
+import gr.codingschool.iwg.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

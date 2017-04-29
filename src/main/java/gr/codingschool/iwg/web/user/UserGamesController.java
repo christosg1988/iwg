@@ -1,16 +1,16 @@
 package gr.codingschool.iwg.web.user;
 
-import gr.codingschool.iwg.model.Game;
-import gr.codingschool.iwg.model.GamePlay;
+import gr.codingschool.iwg.model.game.Game;
+import gr.codingschool.iwg.model.game.GamePlay;
 import gr.codingschool.iwg.model.SortedOption;
-import gr.codingschool.iwg.model.User;
-import gr.codingschool.iwg.service.GamePlayService;
+import gr.codingschool.iwg.model.user.User;
 import gr.codingschool.iwg.service.GameService;
 import gr.codingschool.iwg.service.NotificationService;
 import gr.codingschool.iwg.service.UserService;
 import gr.codingschool.iwg.web.PageWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Controller;
@@ -28,8 +28,6 @@ public class UserGamesController {
 
     @Autowired
     private GameService gameService;
-    @Autowired
-    private GamePlayService gamePlayService;
     @Autowired
     private NotificationService notificationService;
     @Autowired
@@ -49,14 +47,45 @@ public class UserGamesController {
         Page<Game> gamePage = gameService.findAllGames(pageable);
         PageWrapper<Game> page = new PageWrapper<Game>(gamePage, "/user/games");
 
-        List<GamePlay> recentGames = gamePlayService.findRecentlyPlayedByUser(user);
+        List<GamePlay> recentGames = gameService.findRecentlyPlayedByUser(user);
+
+        modelAndView.addObject("selected", findSelectedOption(pageable));
+        modelAndView.addObject("sortedOptions", createSortedOptions());
+        modelAndView.addObject("favouritesList", user.getListOfFavouriteGameIds());
+        modelAndView.addObject("list", page.getContent());
+        modelAndView.addObject("page", page);
+        modelAndView.addObject("recent", recentGames);
+        modelAndView.setViewName("user/games");
+
+        return modelAndView;
+    }
+
+    @RequestMapping(value = {"/user/favourites"}, method = RequestMethod.GET)
+    public ModelAndView favouritesHome(@SortDefault(value = "name") Pageable pageable, HttpSession session) {
+        ModelAndView modelAndView = new ModelAndView();
+        User loggedInUser = (User) session.getAttribute("user");
+        int unreadNotifications = notificationService.findUnreadNotificationsByUser(loggedInUser).size();
+        User user = userService.findByUsername(loggedInUser.getUsername());
+
+        modelAndView.addObject("unreadNotifications", unreadNotifications);
+        modelAndView.addObject("user", user);
+        modelAndView.addObject("wallet", user.getWallet());
+
+        List<Game> listOfFavouriteGames = new ArrayList<>();
+        listOfFavouriteGames.addAll(user.getFavouriteGames());
+
+        final Page<Game> gamePage = new PageImpl<>(listOfFavouriteGames, pageable, listOfFavouriteGames.size());
+
+        PageWrapper<Game> page = new PageWrapper<Game>(gamePage, "/user/favourites");
+
+        List<GamePlay> recentGames = gameService.findRecentlyPlayedByUser(user);
 
         modelAndView.addObject("selected", findSelectedOption(pageable));
         modelAndView.addObject("sortedOptions", createSortedOptions());
         modelAndView.addObject("list", page.getContent());
         modelAndView.addObject("page", page);
         modelAndView.addObject("recent", recentGames);
-        modelAndView.setViewName("user/games");
+        modelAndView.setViewName("user/favourites");
 
         return modelAndView;
     }

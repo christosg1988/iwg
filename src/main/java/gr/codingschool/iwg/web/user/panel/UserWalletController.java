@@ -2,9 +2,8 @@ package gr.codingschool.iwg.web.user.panel;
 
 import gr.codingschool.iwg.model.Coupon;
 import gr.codingschool.iwg.model.Event;
-import gr.codingschool.iwg.model.User;
-import gr.codingschool.iwg.model.WithdrawAmount;
-import gr.codingschool.iwg.service.CouponService;
+import gr.codingschool.iwg.model.user.User;
+import gr.codingschool.iwg.model.user.WithdrawAmount;
 import gr.codingschool.iwg.service.EventService;
 import gr.codingschool.iwg.service.NotificationService;
 import gr.codingschool.iwg.service.UserService;
@@ -24,8 +23,6 @@ public class UserWalletController {
     private NotificationService notificationService;
     @Autowired
     private UserService userService;
-    @Autowired
-    private CouponService couponService;
 
     @RequestMapping(value = {"/user/panel/wallet"}, method = RequestMethod.GET)
     public ModelAndView userWallet(HttpSession session) {
@@ -68,7 +65,7 @@ public class UserWalletController {
         ModelAndView modelAndView = new ModelAndView();
         User loggedInUser = (User) session.getAttribute("user");
         int unreadNotifications = notificationService.findUnreadNotificationsByUser(loggedInUser).size();
-        coupon = couponService.getCouponIfAvailable(coupon.getCode());
+        coupon = userService.getCouponIfAvailable(coupon.getCode());
         if(coupon == null){
             User user = userService.findByUsername(loggedInUser.getUsername());
             modelAndView.addObject("unreadNotifications", unreadNotifications);
@@ -80,7 +77,7 @@ public class UserWalletController {
             return modelAndView;
         }
         userService.addBalance(loggedInUser.getUsername(),coupon.getValue());
-        couponService.useCoupon(coupon.getCode());
+        userService.useCoupon(coupon.getCode());
         User user = userService.findByUsername(loggedInUser.getUsername());
 
         Event addedBalanceEvent = new Event();

@@ -1,17 +1,12 @@
 package gr.codingschool.iwg.web.user;
 
-import gr.codingschool.iwg.model.Game;
-import gr.codingschool.iwg.model.GamePlay;
-import gr.codingschool.iwg.model.User;
-import gr.codingschool.iwg.service.GamePlayService;
+import gr.codingschool.iwg.model.game.Game;
+import gr.codingschool.iwg.model.game.GamePlay;
+import gr.codingschool.iwg.model.user.User;
 import gr.codingschool.iwg.service.GameService;
 import gr.codingschool.iwg.service.NotificationService;
 import gr.codingschool.iwg.service.UserService;
-import gr.codingschool.iwg.web.PageWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,17 +20,15 @@ import java.util.List;
  * Created by christos_georgiadis on 24/04/2017.
  */
 @Controller
-public class GameController {
+public class UserGameController {
     @Autowired
     private GameService gameService;
-    @Autowired
-    private GamePlayService gamePlayService;
     @Autowired
     private NotificationService notificationService;
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = {"/user/game"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/user/game", "/user/favourites/game"}, method = RequestMethod.GET)
     public ModelAndView home(@RequestParam("id") int id , HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();
 
@@ -44,16 +37,21 @@ public class GameController {
         User user = userService.findByUsername(loggedInUser.getUsername());
 
         Game game = gameService.findGameById(id);
-        List<GamePlay> recentGames = gamePlayService.findRecentlyPlayedByUser(user);
+        List<GamePlay> recentGames = gameService.findRecentlyPlayedByUser(user);
 
         modelAndView.addObject("user", user);
         modelAndView.addObject("unreadNotifications", unreadNotifications);
         modelAndView.addObject("wallet", user.getWallet());
         modelAndView.addObject("game", game);
+        modelAndView.addObject("isFavourite", isFavouriteGame(user, game));
         modelAndView.addObject("recent", recentGames);
 
         modelAndView.setViewName("user/game");
 
         return modelAndView;
+    }
+
+    private boolean isFavouriteGame(User user, Game game){
+        return user.getListOfFavouriteGameIds().contains(game.getId());
     }
 }

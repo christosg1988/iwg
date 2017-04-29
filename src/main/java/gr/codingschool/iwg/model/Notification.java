@@ -1,5 +1,7 @@
 package gr.codingschool.iwg.model;
 
+import gr.codingschool.iwg.model.user.User;
+
 import javax.persistence.*;
 import java.util.Date;
 

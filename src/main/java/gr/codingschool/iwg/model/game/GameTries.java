@@ -1,7 +1,8 @@
-package gr.codingschool.iwg.model;
+package gr.codingschool.iwg.model.game;
+
+import gr.codingschool.iwg.model.user.User;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 /**
  * Created by christos_georgiadis on 24/04/2017.

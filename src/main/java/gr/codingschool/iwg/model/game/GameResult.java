@@ -1,11 +1,12 @@
-package gr.codingschool.iwg.model;
+package gr.codingschool.iwg.model.game;
 
 /**
  * Created by christos_georgiadis on 26/04/2017.
  */
 public class GameResult {
     private boolean result;
-    private int balance;
+    private int newBalance;
+    private int oldBalance;
     private boolean enoughBalance;
 
     public boolean getResult() {
@@ -16,12 +17,20 @@ public class GameResult {
         this.result = result;
     }
 
-    public int getBalance() {
-        return balance;
+    public int getNewBalance() {
+        return newBalance;
     }
 
-    public void setBalance(int balance) {
-        this.balance = balance;
+    public void setNewBalance(int newBalance) {
+        this.newBalance = newBalance;
+    }
+
+    public int getOldBalance() {
+        return oldBalance;
+    }
+
+    public void setOldBalance(int oldBalance) {
+        this.oldBalance = oldBalance;
     }
 
     public boolean getEnoughBalance() {

@@ -1,8 +1,8 @@
-package gr.codingschool.iwg.repository;
+package gr.codingschool.iwg.repository.game;
 
-import gr.codingschool.iwg.model.Game;
-import gr.codingschool.iwg.model.GamePlay;
-import gr.codingschool.iwg.model.User;
+import gr.codingschool.iwg.model.game.Game;
+import gr.codingschool.iwg.model.game.GamePlay;
+import gr.codingschool.iwg.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

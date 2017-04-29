@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gr.codingschool.iwg.model;
+package gr.codingschool.iwg.model.user;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

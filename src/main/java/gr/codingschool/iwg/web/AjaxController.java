@@ -2,6 +2,12 @@ package gr.codingschool.iwg.web;
 
 import com.sun.net.httpserver.Authenticator;
 import gr.codingschool.iwg.model.*;
+import gr.codingschool.iwg.model.game.Game;
+import gr.codingschool.iwg.model.game.GameResult;
+import gr.codingschool.iwg.model.game.GameTries;
+import gr.codingschool.iwg.model.user.LoginForm;
+import gr.codingschool.iwg.model.user.User;
+import gr.codingschool.iwg.model.user.UserWallet;
 import gr.codingschool.iwg.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,13 +29,9 @@ public class AjaxController {
     @Autowired
     private EventService eventService;
     @Autowired
-    private GameTriesService gameTriesService;
-    @Autowired
     private GameService gameService;
     @Autowired
-    private GamePlayService gamePlayService;
-    @Autowired
-    private UserWalletService userWalletService;
+    private NotificationService notificationService;
 
     private static final int NUMBER_OF_TRIES = 2;
 
@@ -66,11 +68,51 @@ public class AjaxController {
         return new ResponseEntity<Authenticator.Success>(HttpStatus.OK);
     }
 
-    @RequestMapping(value = {"/user/try"}, produces = "application/json")
+    @SuppressWarnings("Duplicates")
+    @RequestMapping(value = {"/user/game/favourite"})
+    public ResponseEntity addToFavouritesViaAjax(@RequestParam("gameId") int gameId, HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("user");
+        User user = userService.findByUsername(loggedInUser.getUsername());
+
+        Game game = gameService.findGameById(gameId);
+
+        user.getFavouriteGames().add(game);
+        userService.updateUser(user);
+
+        Event favouriteEvent = new Event();
+        favouriteEvent.setUser(user);
+        favouriteEvent.setType("Favourite game");
+        favouriteEvent.setInformation("The user added the game with name '" + game.getName() + "' as favourite");
+        eventService.save(favouriteEvent);
+
+        return new ResponseEntity<Authenticator.Success>(HttpStatus.OK);
+    }
+
+    @SuppressWarnings("Duplicates")
+    @RequestMapping(value = {"/user/game/unFavourite"})
+    public ResponseEntity removeFromFavouritesViaAjax(@RequestParam("gameId") int gameId, HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("user");
+        User user = userService.findByUsername(loggedInUser.getUsername());
+
+        Game game = gameService.findGameById(gameId);
+
+        user.getFavouriteGames().remove(game);
+        userService.updateUser(user);
+
+        Event favouriteEvent = new Event();
+        favouriteEvent.setUser(user);
+        favouriteEvent.setType("Favourite game");
+        favouriteEvent.setInformation("The user removed the game with name '" + game.getName() + "' from favourites");
+        eventService.save(favouriteEvent);
+
+        return new ResponseEntity<Authenticator.Success>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = {"/user/game/try"}, produces = "application/json")
     public @ResponseBody int getGameTriesPerUserViaAjax(@RequestParam("gameId") int gameId, HttpSession session){
         User loggedInUser = (User) session.getAttribute("user");
 
-        GameTries foundGameTries = gameTriesService.findTriesByUserIdAndGameId(loggedInUser.getId(), gameId);
+        GameTries foundGameTries = gameService.findTriesByUserIdAndGameId(loggedInUser.getId(), gameId);
 
         if(foundGameTries != null){
             if(foundGameTries.getTries() == 0){
@@ -79,8 +121,14 @@ public class AjaxController {
             else{
                 foundGameTries.setTries(foundGameTries.getTries() - 1);
 
-                GameTries savedGameTries = gameTriesService.save(foundGameTries);
+                GameTries savedGameTries = gameService.saveGameTries(foundGameTries);
                 Game game = gameService.findGameById(gameId);
+
+                Event tryEvent = new Event();
+                tryEvent.setUser(loggedInUser);
+                tryEvent.setType("Try game");
+                tryEvent.setInformation("The user tried the game with name: '" + game.getName() + "'");
+                eventService.save(tryEvent);
 
                 return findRandomOddsForTryingMode(game.getOdds());
             }
@@ -93,19 +141,26 @@ public class AjaxController {
             gameTries.setUser(loggedInUser);
             gameTries.setTries(NUMBER_OF_TRIES);
 
-            GameTries savedGameTries = gameTriesService.save(gameTries);
+            GameTries savedGameTries = gameService.saveGameTries(gameTries);
+
+            Event tryEvent = new Event();
+            tryEvent.setUser(loggedInUser);
+            tryEvent.setType("Try game");
+            tryEvent.setInformation("The user tried the game with name '" + game.getName() + "'");
+            eventService.save(tryEvent);
 
             return findRandomOddsForTryingMode(game.getOdds());
         }
 
     }
 
-    @RequestMapping(value = {"/user/play"})
+    @RequestMapping(value = {"/user/game/play"})
     public ResponseEntity<GameResult> playGameViaAjax(@RequestParam("gameId") int gameId, HttpSession session){
         User loggedInUser = (User) session.getAttribute("user");
         Game game = gameService.findGameById(gameId);
+        UserWallet wallet = userService.getWalletForUser(loggedInUser.getUsername());
 
-        boolean isBalanced = hasEnoughBalance(loggedInUser, game);
+        boolean isBalanced = hasEnoughBalance(wallet, game);
 
         if(isBalanced) {
             boolean isAWin = findRandomOddsForPlayingMode(game.getOdds());
@@ -113,9 +168,16 @@ public class AjaxController {
             GameResult gameResult = new GameResult();
             gameResult.setEnoughBalance(true);
             gameResult.setResult(isAWin);
-            gameResult.setBalance(calculateAndUpdateBalance(isAWin, loggedInUser, game));
+            gameResult.setOldBalance(wallet.getBalance());
+            gameResult.setNewBalance(calculateAndUpdateBalance(isAWin, wallet, game));
 
-            gamePlayService.save(loggedInUser,game,isAWin);
+            gameService.saveGamePlay(loggedInUser,game,isAWin);
+
+            Event playEvent = new Event();
+            playEvent.setUser(loggedInUser);
+            playEvent.setType("Play game");
+            playEvent.setInformation("The user played the game with name '" + game.getName() + "' and " + (isAWin? "won" : "lost"));
+            eventService.save(playEvent);
 
             return new ResponseEntity<>(gameResult, HttpStatus.OK);
         }
@@ -123,6 +185,7 @@ public class AjaxController {
             GameResult gameResult = new GameResult();
             gameResult.setEnoughBalance(false);
             gameResult.setResult(false);
+            gameResult.setOldBalance(wallet.getBalance());
             return new ResponseEntity<>(gameResult,  HttpStatus.OK);
         }
     }
@@ -150,25 +213,24 @@ public class AjaxController {
         }
     }
 
-    private boolean hasEnoughBalance(User user, Game game){
-        return ((user.getWallet().getBalance()) >= (game.getPrice()));
+    private boolean hasEnoughBalance(UserWallet wallet, Game game){
+        return ((wallet.getBalance()) >= (game.getPrice()));
     }
 
-    private int calculateAndUpdateBalance(boolean isWin, User user, Game game){
+    private int calculateAndUpdateBalance(boolean isWin, UserWallet wallet, Game game){
         int newBalance;
 
         if(isWin){
-            newBalance = user.getWallet().getBalance() + (game.getPrize() - game.getPrice());
+            newBalance = wallet.getBalance() + (game.getPrize() - game.getPrice());
         }
         else{
-            newBalance = user.getWallet().getBalance() - game.getPrice();
+            newBalance = wallet.getBalance() - game.getPrice();
         }
 
-        UserWallet userWallet = user.getWallet();
-        userWallet.setBalance(newBalance);
+        wallet.setBalance(newBalance);
 
-        userWalletService.save(userWallet);
+        userService.saveWallet(wallet);
 
-        return userWallet.getBalance();
+        return wallet.getBalance();
     }
 }

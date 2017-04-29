@@ -6,9 +6,9 @@
 package gr.codingschool.iwg.web;
 
 import gr.codingschool.iwg.model.Event;
-import gr.codingschool.iwg.model.LoginForm;
+import gr.codingschool.iwg.model.user.LoginForm;
 import gr.codingschool.iwg.model.Notification;
-import gr.codingschool.iwg.model.User;
+import gr.codingschool.iwg.model.user.User;
 import gr.codingschool.iwg.service.EventService;
 import gr.codingschool.iwg.service.NotificationService;
 import gr.codingschool.iwg.service.SecurityService;
@@ -95,9 +95,16 @@ public class LoginController {
         loginEvent.setInformation("The user logged in");
         eventService.save(loginEvent);
 
-        session.setAttribute("user", existingUser);
-        session.setAttribute("notifications", notifications);
-        modelAndView.setViewName("redirect:/games");
-        return modelAndView;
+        if(existingUser.hasRole("ROLE_USER")) {
+            session.setAttribute("user", existingUser);
+            session.setAttribute("notifications", notifications);
+            modelAndView.setViewName("redirect:/user");
+            return modelAndView;
+        }
+        else {
+            session.setAttribute("user", existingUser);
+            modelAndView.setViewName("redirect:/admin");
+            return modelAndView;
+        }
     }
 }

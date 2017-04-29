@@ -1,4 +1,6 @@
-package gr.codingschool.iwg.model;
+package gr.codingschool.iwg.model.game;
+
+import gr.codingschool.iwg.model.user.User;
 
 import javax.persistence.*;
 import java.util.Date;

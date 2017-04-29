@@ -46,15 +46,16 @@ $(document).ready(function() {
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a href="#" class="navbar-brand">IWG Agile Actors</a>
+        <a href="/user" class="navbar-brand">IWG Agile Actors</a>
     </div>
     <div id="navbarCollapse" class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
             <li><a href="/user/games">Games</a></li>
+            <li><a href="/user/favourites">Favourites</a></li>
             <li><a href="/user/panel">Control panel</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="#"><span class="glyphicon glyphicon-user"></span> <span th:utext="${user.username}"></span> </a></li>
+            <li><a href="/user/panel"><span class="glyphicon glyphicon-user"></span> <span th:utext="${user.username}"></span> </a></li>
             <li><a href="/user/panel/wallet"><span class="glyphicon glyphicon-eur"></span> <span th:utext="${wallet.balance}"></span> </a></li>
             <li><a href="/user/panel/notifications"><span class="glyphicon glyphicon-envelope"></span> <span th:utext="${unreadNotifications}"></span> </a></li>
             <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
