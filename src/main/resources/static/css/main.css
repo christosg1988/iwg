@@ -330,6 +330,28 @@
 		animation: fadein 0.5s, fadeout 0.5s 2.5s;
 	}
 
+	#snackbar2 {
+		visibility: hidden;
+		min-width: 250px;
+		margin-left: -125px;
+		background-color: #0cff7c;
+		color: #fff;
+		text-align: center;
+		border-radius: 2px;
+		padding: 16px;
+		position: fixed;
+		z-index: 1;
+		left: 50%;
+		bottom: 50px;
+		font-size: 17px;
+	}
+
+	#snackbar2.show {
+		visibility: visible;
+		-webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+		animation: fadein 0.5s, fadeout 0.5s 2.5s;
+	}
+
 	@-webkit-keyframes fadein {
 		from {bottom: 0; opacity: 0;}
 		to {bottom: 50px; opacity: 1;}
@@ -354,8 +376,6 @@
 -------------------------*/
 
 
-
-
 	.button{
 		z-index: 0;
 		background: #191919;
@@ -378,8 +398,64 @@
 		transition: all 0.4s;
 	}
 
+	.box-btn {
+		float: left;
+		background: transparent;
+		font-size: 53px;
+		color: #4D4E56;
+		font-weight: 300;
+		cursor: pointer;
+		border-radius: 2px;
+		line-height: 0.5;
+		border: none;
+		outline: none;
+	}
 
-	
+	.glyphicon {
+		transition: color .3s linear;
+	}
+
+	#favourite {
+		transition: color .3s linear;
+		color: red;
+	}
+
+	#notFavourite {
+		transition: color .3s linear;
+		color: white;
+	}
+
+	#gamesFavourite{
+		transition: color .3s linear;
+		color: red;
+	}
+
+	#favourite:hover,
+	#favourite:active,
+	#favourite:focus
+	{
+		text-decoration:none;
+		outline:none;
+		color: #fff;  /*#505050*/
+	}
+
+	#notFavourite:hover,
+	#notFavourite:active,
+	#notFavourite:focus
+	{
+		text-decoration:none;
+		outline:none;
+		color: red;  /*#505050*/
+	}
+
+	.icon-button {
+		appearance: none;
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		outline: none;
+		border: 0;
+		background: transparent;
+	}
 	
 /* Floats
 -------------------------*/

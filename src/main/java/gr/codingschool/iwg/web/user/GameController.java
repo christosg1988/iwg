@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,7 +36,7 @@ public class GameController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = {"/user/game"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/user/game", "/user/favourites/game"}, method = RequestMethod.GET)
     public ModelAndView home(@RequestParam("id") int id , HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();
 
@@ -50,10 +51,15 @@ public class GameController {
         modelAndView.addObject("unreadNotifications", unreadNotifications);
         modelAndView.addObject("wallet", user.getWallet());
         modelAndView.addObject("game", game);
+        modelAndView.addObject("isFavourite", isFavouriteGame(user, game));
         modelAndView.addObject("recent", recentGames);
 
         modelAndView.setViewName("user/game");
 
         return modelAndView;
+    }
+
+    private boolean isFavouriteGame(User user, Game game){
+        return user.getListOfFavouriteGameIds().contains(game.getId());
     }
 }

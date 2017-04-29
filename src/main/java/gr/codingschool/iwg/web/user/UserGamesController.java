@@ -11,6 +11,7 @@ import gr.codingschool.iwg.service.UserService;
 import gr.codingschool.iwg.web.PageWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Controller;
@@ -50,6 +51,34 @@ public class UserGamesController {
         PageWrapper<Game> page = new PageWrapper<Game>(gamePage, "/user/games");
 
         List<GamePlay> recentGames = gamePlayService.findRecentlyPlayedByUser(user);
+
+        modelAndView.addObject("selected", findSelectedOption(pageable));
+        modelAndView.addObject("sortedOptions", createSortedOptions());
+        modelAndView.addObject("favouritesList", user.getListOfFavouriteGameIds());
+        modelAndView.addObject("list", page.getContent());
+        modelAndView.addObject("page", page);
+        modelAndView.setViewName("user/games");
+
+        return modelAndView;
+    }
+
+    @RequestMapping(value = {"/user/favourites"}, method = RequestMethod.GET)
+    public ModelAndView favouritesHome(@SortDefault(value = "name") Pageable pageable, HttpSession session) {
+        ModelAndView modelAndView = new ModelAndView();
+        User loggedInUser = (User) session.getAttribute("user");
+        int unreadNotifications = notificationService.findUnreadNotificationsByUser(loggedInUser).size();
+        User user = userService.findByUsername(loggedInUser.getUsername());
+
+        modelAndView.addObject("unreadNotifications", unreadNotifications);
+        modelAndView.addObject("user", user);
+        modelAndView.addObject("wallet", user.getWallet());
+
+        List<Game> listOfFavouriteGames = new ArrayList<>();
+        listOfFavouriteGames.addAll(user.getFavouriteGames());
+
+        final Page<Game> gamePage = new PageImpl<>(listOfFavouriteGames, pageable, listOfFavouriteGames.size());
+
+        PageWrapper<Game> page = new PageWrapper<Game>(gamePage, "/user/favourites");
 
         modelAndView.addObject("selected", findSelectedOption(pageable));
         modelAndView.addObject("sortedOptions", createSortedOptions());

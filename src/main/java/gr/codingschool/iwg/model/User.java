@@ -11,6 +11,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -69,6 +71,10 @@ public class User{
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "userId", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "roleId", referencedColumnName = "id"))
     private Set<Role> roles;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "users_favourite_games", joinColumns = @JoinColumn(name = "userId", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "gameId", referencedColumnName = "id"))
+    private Set<Game> favouriteGames;
 
     public int getId() {
         return id;
@@ -174,5 +180,23 @@ public class User{
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<Game> getFavouriteGames() {
+        return favouriteGames;
+    }
+
+    public void setFavouriteGames(Set<Game> favouriteGames) {
+        this.favouriteGames = favouriteGames;
+    }
+
+    public List<Integer> getListOfFavouriteGameIds(){
+        List<Integer> favouriteGameIds = new ArrayList<>();
+
+        for(Game game : favouriteGames){
+            favouriteGameIds.add(game.getId());
+        }
+
+        return favouriteGameIds;
     }
 }
