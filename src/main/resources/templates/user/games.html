@@ -27,7 +27,7 @@
         <ul class="nav navbar-nav">
             <li><a href="/user/games">Games</a></li>
             <li><a href="/user/favourites">Favourites</a></li>
-            <li><a href="/user/panel">Control panel</a></li>
+            <li><a href="/user/panel">Profile</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="/user/panel"><span class="glyphicon glyphicon-user"></span> <span th:utext="${user.username}"></span> </a></li>
@@ -53,7 +53,7 @@
 <div class="container" style="margin-bottom:20px; margin-top:20px;max-width:1200px;">
     <div class="row">
         <div class="col-sm-12 col-xs-12 col-md-4 col-lg-3" th:each="game : ${list}">
-            <div class="thumbnail bootsnipp-thumb" >
+            <div class="thumbnail bootsnipp-thumb">
                 <div style="width: auto;">
                     <span style="float: right" id="gamesFavourite" th:if="${not #lists.isEmpty(favouritesList) and #lists.contains(favouritesList, game.id)}" class="glyphicon glyphicon-heart" ></span>
                     <img style="height: 100px; margin: 0 auto" class="img-responsive" th:src="${game.image}" th:title="${game.name}" th:alt="${game.name}">

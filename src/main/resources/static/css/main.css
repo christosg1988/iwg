@@ -428,6 +428,11 @@
 		color: red;
 	}
 
+	#edit {
+		transition: color .3s linear;
+		color: #777777;
+	}
+
 	#notFavourite {
 		transition: color .3s linear;
 		color: white;
@@ -436,6 +441,15 @@
 	#gamesFavourite{
 		transition: color .3s linear;
 		color: red;
+	}
+
+	#edit:hover,
+	#edit:active,
+	#edit:focus
+	{
+		text-decoration:none;
+		outline:none;
+		color: #fff;  /*#505050*/
 	}
 
 	#favourite:hover,
@@ -533,6 +547,16 @@
 		transition: all 0.4s;
 	}
 
+	.separator-full {
+    		width: 100%;
+    		height: 1px;
+    		background: #505050 none repeat;
+    		margin: 25px auto;
+    		-webkit-transition: all 0.4s;
+    		-moz-transition: all 0.4s;
+    		transition: all 0.4s;
+    	}
+
 
 
 
@@ -560,7 +584,10 @@
 	.mbottom10{
 		margin-bottom: 10px;
 	}
-	
+
+	.mleft0{
+	    margin-left: 0px;
+	}
 
 	
 	
@@ -718,6 +745,10 @@
 
 	.gray2{
 		color: #505050;
+	}
+
+	.green{
+	    color: #00ff12;
 	}
 
 	.colored{

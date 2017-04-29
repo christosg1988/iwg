@@ -37,7 +37,7 @@
     </div>
 </nav>
 
-
+<div class="row">
 <label for="selection">Sort by (Asc)</label>
 <div id="selection" class="btn-group bootstrap-select">
     <select class="selectpicker" id="selected" onchange="location.href='/games?' + 'sort=' + this.value ">
@@ -47,6 +47,7 @@
                 th:selected="${option.isSelected(selected)}">
         </option>
     </select>
+</div>
 </div>
 
 
