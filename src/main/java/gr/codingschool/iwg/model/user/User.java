@@ -11,6 +11,7 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +61,8 @@ public class User{
     private String address;
 
     @Column(name = "dateOfBirth")
+    @NotEmpty(message = "*Please provide your date of birth")
+    @Min(18)
     private Date dateOfBirth;
 
     @Column(name = "active")
