@@ -398,6 +398,14 @@
 		transition: all 0.4s;
 	}
 
+	#favouriteButton #unFavouriteButton {
+		background: Transparent no-repeat;
+		border: none;
+		cursor:pointer;
+		overflow: hidden;
+		outline:none;
+	}
+
 	.box-btn {
 		float: left;
 		background: transparent;
