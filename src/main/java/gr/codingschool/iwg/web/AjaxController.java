@@ -82,6 +82,12 @@ public class AjaxController {
                 GameTries savedGameTries = gameTriesService.save(foundGameTries);
                 Game game = gameService.findGameById(gameId);
 
+                Event tryEvent = new Event();
+                tryEvent.setUser(loggedInUser);
+                tryEvent.setType("Try game");
+                tryEvent.setInformation("The user tried the game with name: '" + game.getName() + "'");
+                eventService.save(tryEvent);
+
                 return findRandomOddsForTryingMode(game.getOdds());
             }
         }
@@ -94,6 +100,12 @@ public class AjaxController {
             gameTries.setTries(NUMBER_OF_TRIES);
 
             GameTries savedGameTries = gameTriesService.save(gameTries);
+
+            Event tryEvent = new Event();
+            tryEvent.setUser(loggedInUser);
+            tryEvent.setType("Try game");
+            tryEvent.setInformation("The user tried the game with name '" + game.getName() + "'");
+            eventService.save(tryEvent);
 
             return findRandomOddsForTryingMode(game.getOdds());
         }
@@ -116,6 +128,12 @@ public class AjaxController {
             gameResult.setBalance(calculateAndUpdateBalance(isAWin, loggedInUser, game));
 
             gamePlayService.save(loggedInUser,game,isAWin);
+
+            Event playEvent = new Event();
+            playEvent.setUser(loggedInUser);
+            playEvent.setType("Play game");
+            playEvent.setInformation("The user played the game with name '" + game.getName() + "' and " + (isAWin? "won" : "lost"));
+            eventService.save(playEvent);
 
             return new ResponseEntity<>(gameResult, HttpStatus.OK);
         }

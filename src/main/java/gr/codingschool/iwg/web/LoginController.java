@@ -95,9 +95,16 @@ public class LoginController {
         loginEvent.setInformation("The user logged in");
         eventService.save(loginEvent);
 
-        session.setAttribute("user", existingUser);
-        session.setAttribute("notifications", notifications);
-        modelAndView.setViewName("redirect:/games");
-        return modelAndView;
+        if(existingUser.hasRole("ROLE_USER")) {
+            session.setAttribute("user", existingUser);
+            session.setAttribute("notifications", notifications);
+            modelAndView.setViewName("redirect:/user");
+            return modelAndView;
+        }
+        else {
+            session.setAttribute("user", existingUser);
+            modelAndView.setViewName("redirect:/admin");
+            return modelAndView;
+        }
     }
 }

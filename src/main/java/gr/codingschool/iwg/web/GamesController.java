@@ -25,7 +25,7 @@ public class GamesController {
     @Autowired
     private GameService gameService;
 
-    @RequestMapping(value = {"/", "/games", "/home"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/", "/home", "/games", }, method = RequestMethod.GET)
     public ModelAndView home(@SortDefault(value = "name") Pageable pageable, HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();
         User loggedInUser = (User) session.getAttribute("user");
