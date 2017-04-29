@@ -5,8 +5,11 @@
  */
 package gr.codingschool.iwg.service;
 
+import gr.codingschool.iwg.model.Game;
 import gr.codingschool.iwg.model.User;
 import gr.codingschool.iwg.model.UserWallet;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -25,5 +28,6 @@ public interface UserService {
     Boolean useBalanceIfAvailable(String username, int usedBalance);
     Boolean withdrawBalance(String username, int withdrawnBalance);
     User save(User user);
+    User update(User user);
     User authenticate(String username, String password);
 }

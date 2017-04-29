@@ -4,13 +4,20 @@
 
 var game_id = 0;
 var game_price = 0;
-var wallet_balance = 0;
 
 $(document).ready(function(){
+
+    $( function () {
+        if ( sessionStorage.getItem("showSnackbar") != null && sessionStorage.getItem("showSnackbar") == 'true') {
+            showSnackbar2(sessionStorage.getItem("text"));
+            sessionStorage.setItem("showSnackbar", 'false');
+        }
+    } )
+
     $('#tryButton').click(function() {
         $.ajax({
             type : "POST",
-            url : "/user/try",
+            url : "/user/game/try",
             data : 'gameId=' + game_id,
             dataType: "json",
             timeout : 100000,
@@ -47,14 +54,13 @@ $(document).ready(function(){
     $('#playButton').click(function() {
         $.ajax({
             type : "POST",
-            url : "/user/play",
+            url : "/user/game/play",
             data : 'gameId=' + game_id,
             dataType: "json",
             timeout : 100000,
-            status: 200,
             success : function(data) {
                 if(data['enoughBalance']){
-                    document.getElementById("balance").innerHTML = (wallet_balance - game_price).toString();
+                    document.getElementById("balance").innerHTML = (data['oldBalance'] - game_price).toString();
 
                     $('#gamePlay').show(500);
 
@@ -62,7 +68,7 @@ $(document).ready(function(){
                         hidePage();
                     }
 
-                    setTimeout(function() {showGameResultAndUpdateBalance(data['result'], data['balance'])}, 3000);
+                    setTimeout(function() {showGameResultAndUpdateBalance(data['result'], data['newBalance'])}, 3000);
 
                     $("html, body").animate({ scrollTop: $(document).height() }, "slow");
                 }
@@ -77,10 +83,57 @@ $(document).ready(function(){
             }
         });
     });
+
+    $('#favouriteButton').click(function () {
+        $.ajax({
+            type : "POST",
+            url : "/user/game/unFavourite",
+            data : 'gameId=' + game_id,
+            timeout : 100000,
+            success : function() {
+                var text = 'The game was removed from your favourites...';
+
+                sessionStorage.setItem("text", text);
+                sessionStorage.setItem("showSnackbar", 'true');
+
+                window.location.href = "/user/game?id=" + game_id;
+            },
+            error : function() {
+            }
+        });
+
+    });
+
+    $('#unFavouriteButton').click(function () {
+        $.ajax({
+            type : "POST",
+            url : "/user/game/favourite",
+            data : 'gameId=' + game_id,
+            timeout : 100000,
+            success : function() {
+                var text = 'The game was added to your favourites!';
+
+                sessionStorage.setItem("text", text);
+                sessionStorage.setItem("showSnackbar", 'true');
+
+                window.location.href = "/user/game?id=" + game_id;
+            },
+            error : function() {
+            }
+        });
+    });
 });
+
 
 function showSnackbar(text){
     var x = document.getElementById("snackbar");
+    x.innerHTML = text;
+    x.className = "show";
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
+
+function showSnackbar2(text){
+    var x = document.getElementById("snackbar2");
     x.innerHTML = text;
     x.className = "show";
     setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
@@ -119,10 +172,9 @@ function hidePage() {
     document.getElementById("gameMessage").style.display = "none";
 }
 
-function getInfo(gameID, gamePrice, walletBalance){
+function getInfo(gameID, gamePrice){
     game_id = gameID;
     game_price = gamePrice;
-    wallet_balance = parseInt(walletBalance);
 }
 
 function getGameId(gameID){

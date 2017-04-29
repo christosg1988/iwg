@@ -6,6 +6,7 @@ import gr.codingschool.iwg.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -28,6 +29,8 @@ public class AjaxController {
     private GameService gameService;
     @Autowired
     private UserWalletService userWalletService;
+    @Autowired
+    private NotificationService notificationService;
 
     private static final int NUMBER_OF_TRIES = 2;
 
@@ -64,7 +67,35 @@ public class AjaxController {
         return new ResponseEntity<Authenticator.Success>(HttpStatus.OK);
     }
 
-    @RequestMapping(value = {"/user/try"}, produces = "application/json")
+    @SuppressWarnings("Duplicates")
+    @RequestMapping(value = {"/user/game/favourite"})
+    public ResponseEntity addToFavouritesViaAjax(@RequestParam("gameId") int gameId, HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("user");
+        User user = userService.findByUsername(loggedInUser.getUsername());
+
+        Game game = gameService.findGameById(gameId);
+
+        user.getFavouriteGames().add(game);
+        userService.update(user);
+
+        return new ResponseEntity<Authenticator.Success>(HttpStatus.OK);
+    }
+
+    @SuppressWarnings("Duplicates")
+    @RequestMapping(value = {"/user/game/unFavourite"})
+    public ResponseEntity removeFromFavouritesViaAjax(@RequestParam("gameId") int gameId, HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("user");
+        User user = userService.findByUsername(loggedInUser.getUsername());
+
+        Game game = gameService.findGameById(gameId);
+
+        user.getFavouriteGames().remove(game);
+        userService.update(user);
+
+        return new ResponseEntity<Authenticator.Success>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = {"/user/game/try"}, produces = "application/json")
     public @ResponseBody int getGameTriesPerUserViaAjax(@RequestParam("gameId") int gameId, HttpSession session){
         User loggedInUser = (User) session.getAttribute("user");
 
@@ -98,7 +129,7 @@ public class AjaxController {
 
     }
 
-    @RequestMapping(value = {"/user/play"})
+    @RequestMapping(value = {"/user/game/play"})
     public ResponseEntity<GameResult> playGameViaAjax(@RequestParam("gameId") int gameId, HttpSession session){
         User loggedInUser = (User) session.getAttribute("user");
         Game game = gameService.findGameById(gameId);
@@ -111,7 +142,8 @@ public class AjaxController {
             GameResult gameResult = new GameResult();
             gameResult.setEnoughBalance(true);
             gameResult.setResult(isAWin);
-            gameResult.setBalance(calculateAndUpdateBalance(isAWin, loggedInUser, game));
+            gameResult.setOldBalance(loggedInUser.getWallet().getBalance());
+            gameResult.setNewBalance(calculateAndUpdateBalance(isAWin, loggedInUser, game));
 
             return new ResponseEntity<>(gameResult, HttpStatus.OK);
         }
@@ -119,6 +151,7 @@ public class AjaxController {
             GameResult gameResult = new GameResult();
             gameResult.setEnoughBalance(false);
             gameResult.setResult(false);
+            gameResult.setOldBalance(loggedInUser.getWallet().getBalance());
             return new ResponseEntity<>(gameResult,  HttpStatus.OK);
         }
     }
