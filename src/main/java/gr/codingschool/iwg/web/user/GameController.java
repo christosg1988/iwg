@@ -1,7 +1,9 @@
 package gr.codingschool.iwg.web.user;
 
 import gr.codingschool.iwg.model.Game;
+import gr.codingschool.iwg.model.GamePlay;
 import gr.codingschool.iwg.model.User;
+import gr.codingschool.iwg.service.GamePlayService;
 import gr.codingschool.iwg.service.GameService;
 import gr.codingschool.iwg.service.NotificationService;
 import gr.codingschool.iwg.service.UserService;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * Created by christos_georgiadis on 24/04/2017.
@@ -25,6 +28,8 @@ import javax.servlet.http.HttpSession;
 public class GameController {
     @Autowired
     private GameService gameService;
+    @Autowired
+    private GamePlayService gamePlayService;
     @Autowired
     private NotificationService notificationService;
     @Autowired
@@ -39,11 +44,13 @@ public class GameController {
         User user = userService.findByUsername(loggedInUser.getUsername());
 
         Game game = gameService.findGameById(id);
+        List<GamePlay> recentGames = gamePlayService.findRecentlyPlayedByUser(user);
 
         modelAndView.addObject("user", user);
         modelAndView.addObject("unreadNotifications", unreadNotifications);
         modelAndView.addObject("wallet", user.getWallet());
         modelAndView.addObject("game", game);
+        modelAndView.addObject("recent", recentGames);
 
         modelAndView.setViewName("user/game");
 
