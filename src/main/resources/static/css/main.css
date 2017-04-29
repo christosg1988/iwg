@@ -312,7 +312,7 @@
 		visibility: hidden;
 		min-width: 250px;
 		margin-left: -125px;
-		background-color: red;
+		background-color: #d9534f	;
 		color: #fff;
 		text-align: center;
 		border-radius: 2px;
@@ -334,7 +334,7 @@
 		visibility: hidden;
 		min-width: 250px;
 		margin-left: -125px;
-		background-color: #0cff7c;
+		background-color: #5bc0de;
 		color: #fff;
 		text-align: center;
 		border-radius: 2px;

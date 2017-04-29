@@ -62,7 +62,6 @@ public class User{
 
     @Column(name = "dateOfBirth")
     @NotEmpty(message = "*Please provide your date of birth")
-    @Min(18)
     private Date dateOfBirth;
 
     @Column(name = "active")
