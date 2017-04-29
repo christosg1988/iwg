@@ -80,6 +80,12 @@ public class AjaxController {
         user.getFavouriteGames().add(game);
         userService.update(user);
 
+        Event favouriteEvent = new Event();
+        favouriteEvent.setUser(user);
+        favouriteEvent.setType("Favourite game");
+        favouriteEvent.setInformation("The user added the game with name '" + game.getName() + "' as favourite");
+        eventService.save(favouriteEvent);
+
         return new ResponseEntity<Authenticator.Success>(HttpStatus.OK);
     }
 
@@ -93,6 +99,12 @@ public class AjaxController {
 
         user.getFavouriteGames().remove(game);
         userService.update(user);
+
+        Event favouriteEvent = new Event();
+        favouriteEvent.setUser(user);
+        favouriteEvent.setType("Favourite game");
+        favouriteEvent.setInformation("The user removed the game with name '" + game.getName() + "' from favourites");
+        eventService.save(favouriteEvent);
 
         return new ResponseEntity<Authenticator.Success>(HttpStatus.OK);
     }

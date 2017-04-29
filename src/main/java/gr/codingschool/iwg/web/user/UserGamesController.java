@@ -57,6 +57,7 @@ public class UserGamesController {
         modelAndView.addObject("favouritesList", user.getListOfFavouriteGameIds());
         modelAndView.addObject("list", page.getContent());
         modelAndView.addObject("page", page);
+        modelAndView.addObject("recent", recentGames);
         modelAndView.setViewName("user/games");
 
         return modelAndView;
@@ -80,12 +81,14 @@ public class UserGamesController {
 
         PageWrapper<Game> page = new PageWrapper<Game>(gamePage, "/user/favourites");
 
+        List<GamePlay> recentGames = gamePlayService.findRecentlyPlayedByUser(user);
+
         modelAndView.addObject("selected", findSelectedOption(pageable));
         modelAndView.addObject("sortedOptions", createSortedOptions());
         modelAndView.addObject("list", page.getContent());
         modelAndView.addObject("page", page);
         modelAndView.addObject("recent", recentGames);
-        modelAndView.setViewName("user/games");
+        modelAndView.setViewName("user/favourites");
 
         return modelAndView;
     }
