@@ -13,7 +13,7 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public Coupon getCouponIfAvailable(String code) {
         Coupon coupon = couponRepository.findByCode(code);
-        if(!coupon.getIsUsed())
+        if(!(coupon == null) && !coupon.getIsUsed())
             return coupon;
         else
             return null;

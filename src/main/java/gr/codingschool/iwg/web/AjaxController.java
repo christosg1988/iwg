@@ -27,6 +27,8 @@ public class AjaxController {
     @Autowired
     private GameService gameService;
     @Autowired
+    private GamePlayService gamePlayService;
+    @Autowired
     private UserWalletService userWalletService;
 
     private static final int NUMBER_OF_TRIES = 2;
@@ -112,6 +114,8 @@ public class AjaxController {
             gameResult.setEnoughBalance(true);
             gameResult.setResult(isAWin);
             gameResult.setBalance(calculateAndUpdateBalance(isAWin, loggedInUser, game));
+
+            gamePlayService.save(loggedInUser,game,isAWin);
 
             return new ResponseEntity<>(gameResult, HttpStatus.OK);
         }

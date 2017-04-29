@@ -81,5 +81,32 @@
         </div>
         <div id="snackbar"></div>
     </section>
+
+    <h3 th:if="${!recent.empty}" style="color: cornsilk" class="form-signin-heading">Your most recently played games</h3>
+
+    <div class="row">
+        <div class="col-sm-12 col-xs-12 col-md-3 col-lg-3" th:each="gamePlay : ${recent}">
+            <div class="thumbnail bootsnipp-thumb">
+                <div style="width: auto;">
+                    <img style="height: 100px; margin: 0 auto" class="img-responsive" th:src="${gamePlay.game.image}" th:title="${gamePlay.game.name}" th:alt="${gamePlay.game.name}">
+                </div>
+                <ul class="list-group text-center">
+                    <li class="list-group-item"><i class="fa fa-check"></i><span>Odds of result: </span><span th:text="${gamePlay.game.odds}"></span><span> %</span></li>
+                    <li class="list-group-item"><i class="fa fa-check"></i><span>Game price: </span><span th:text="${gamePlay.game.price}"></span><span> &euro;</span></li>
+                    <li class="list-group-item"><i class="fa fa-check"></i> <span>Prize: </span><span th:text="${gamePlay.game.prize}"></span><span> &euro;</span></li>
+                    <li class="list-group-item"><i class="fa fa-check"></i> <span>Outcome: </span>
+                        <span th:if="${gamePlay.outcome}">You won</span>
+                        <span th:if="${!gamePlay.outcome}">You lost</span>
+                    </li>
+                </ul>
+                <div class="caption">
+                    <a th:href="@{'/user/game'(id=${gamePlay.game.id})}">
+                        <button type="button" class="btn btn-warning">Learn more</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
