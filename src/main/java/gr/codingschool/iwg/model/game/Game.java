@@ -1,4 +1,4 @@
-package gr.codingschool.iwg.model;
+package gr.codingschool.iwg.model.game;
 
 import javax.persistence.*;
 

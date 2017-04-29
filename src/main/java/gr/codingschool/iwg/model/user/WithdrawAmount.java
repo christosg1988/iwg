@@ -1,4 +1,4 @@
-package gr.codingschool.iwg.model;
+package gr.codingschool.iwg.model.user;
 
 /**
  * Created by admin on 24-Apr-17.

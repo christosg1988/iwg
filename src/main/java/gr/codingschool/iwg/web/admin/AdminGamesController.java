@@ -1,8 +1,8 @@
 package gr.codingschool.iwg.web.admin;
 
 import gr.codingschool.iwg.model.Event;
-import gr.codingschool.iwg.model.Game;
-import gr.codingschool.iwg.model.User;
+import gr.codingschool.iwg.model.game.Game;
+import gr.codingschool.iwg.model.user.User;
 import gr.codingschool.iwg.service.EventService;
 import gr.codingschool.iwg.service.GameService;
 import gr.codingschool.iwg.web.PageWrapper;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 @Controller
 public class AdminGamesController {

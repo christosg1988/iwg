@@ -1,6 +1,6 @@
-package gr.codingschool.iwg.repository;
+package gr.codingschool.iwg.repository.game;
 
-import gr.codingschool.iwg.model.GameTries;
+import gr.codingschool.iwg.model.game.GameTries;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

@@ -1,7 +1,7 @@
 package gr.codingschool.iwg.web;
 
 import gr.codingschool.iwg.model.Event;
-import gr.codingschool.iwg.model.User;
+import gr.codingschool.iwg.model.user.User;
 import gr.codingschool.iwg.service.EventService;
 import gr.codingschool.iwg.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class RegisterController {
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName("register");
         } else {
-            userService.save(user);
+            userService.saveUser(user);
 
             userService.initWalletForUser(user.getUsername());
 

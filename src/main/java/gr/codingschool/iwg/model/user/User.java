@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gr.codingschool.iwg.model;
+package gr.codingschool.iwg.model.user;
 
+import gr.codingschool.iwg.model.game.Game;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;

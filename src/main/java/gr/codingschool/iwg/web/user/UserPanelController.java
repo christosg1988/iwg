@@ -1,6 +1,6 @@
 package gr.codingschool.iwg.web.user;
 
-import gr.codingschool.iwg.model.User;
+import gr.codingschool.iwg.model.user.User;
 import gr.codingschool.iwg.service.NotificationService;
 import gr.codingschool.iwg.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

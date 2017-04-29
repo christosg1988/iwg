@@ -1,7 +1,7 @@
 package gr.codingschool.iwg.service;
 
-import gr.codingschool.iwg.model.CurrentUser;
-import gr.codingschool.iwg.model.User;
+import gr.codingschool.iwg.model.user.CurrentUser;
+import gr.codingschool.iwg.model.user.User;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -1,9 +1,9 @@
 package gr.codingschool.iwg.web;
 
-import gr.codingschool.iwg.model.Game;
-import gr.codingschool.iwg.model.LoginForm;
+import gr.codingschool.iwg.model.game.Game;
+import gr.codingschool.iwg.model.user.LoginForm;
 import gr.codingschool.iwg.model.SortedOption;
-import gr.codingschool.iwg.model.User;
+import gr.codingschool.iwg.model.user.User;
 import gr.codingschool.iwg.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-public class GamesController {
+public class HomeController {
     private final static String[] SORT_OPTIONS = {"Name", "Odds", "Price", "Prize"};
 
     @Autowired

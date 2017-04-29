@@ -2,7 +2,7 @@ package gr.codingschool.iwg.web.user.panel;
 
 import gr.codingschool.iwg.model.Event;
 import gr.codingschool.iwg.model.Notification;
-import gr.codingschool.iwg.model.User;
+import gr.codingschool.iwg.model.user.User;
 import gr.codingschool.iwg.service.EventService;
 import gr.codingschool.iwg.service.NotificationService;
 import gr.codingschool.iwg.service.UserService;

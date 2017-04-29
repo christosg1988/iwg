@@ -1,4 +1,4 @@
-package gr.codingschool.iwg.model;
+package gr.codingschool.iwg.model.user;
 
 import org.springframework.security.core.authority.AuthorityUtils;
 

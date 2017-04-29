@@ -3,23 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gr.codingschool.iwg.repository;
+package gr.codingschool.iwg.repository.user;
 
-import gr.codingschool.iwg.model.User;
+import gr.codingschool.iwg.model.user.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  *
  * @author xrist
  */
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface RoleRepository extends JpaRepository<Role, Integer> {
 
-    User findByEmail(String email);
-    User findByUsername(String username);
-    List<User> findAll();
+    Role findByRole(String roleName);
 
 }

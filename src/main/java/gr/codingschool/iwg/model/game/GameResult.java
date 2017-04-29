@@ -1,4 +1,4 @@
-package gr.codingschool.iwg.model;
+package gr.codingschool.iwg.model.game;
 
 /**
  * Created by christos_georgiadis on 26/04/2017.

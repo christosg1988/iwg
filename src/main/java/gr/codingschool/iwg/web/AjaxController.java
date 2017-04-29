@@ -2,11 +2,16 @@ package gr.codingschool.iwg.web;
 
 import com.sun.net.httpserver.Authenticator;
 import gr.codingschool.iwg.model.*;
+import gr.codingschool.iwg.model.game.Game;
+import gr.codingschool.iwg.model.game.GameResult;
+import gr.codingschool.iwg.model.game.GameTries;
+import gr.codingschool.iwg.model.user.LoginForm;
+import gr.codingschool.iwg.model.user.User;
+import gr.codingschool.iwg.model.user.UserWallet;
 import gr.codingschool.iwg.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -24,13 +29,7 @@ public class AjaxController {
     @Autowired
     private EventService eventService;
     @Autowired
-    private GameTriesService gameTriesService;
-    @Autowired
     private GameService gameService;
-    @Autowired
-    private GamePlayService gamePlayService;
-    @Autowired
-    private UserWalletService userWalletService;
     @Autowired
     private NotificationService notificationService;
 
@@ -78,7 +77,7 @@ public class AjaxController {
         Game game = gameService.findGameById(gameId);
 
         user.getFavouriteGames().add(game);
-        userService.update(user);
+        userService.updateUser(user);
 
         Event favouriteEvent = new Event();
         favouriteEvent.setUser(user);
@@ -98,7 +97,7 @@ public class AjaxController {
         Game game = gameService.findGameById(gameId);
 
         user.getFavouriteGames().remove(game);
-        userService.update(user);
+        userService.updateUser(user);
 
         Event favouriteEvent = new Event();
         favouriteEvent.setUser(user);
@@ -113,7 +112,7 @@ public class AjaxController {
     public @ResponseBody int getGameTriesPerUserViaAjax(@RequestParam("gameId") int gameId, HttpSession session){
         User loggedInUser = (User) session.getAttribute("user");
 
-        GameTries foundGameTries = gameTriesService.findTriesByUserIdAndGameId(loggedInUser.getId(), gameId);
+        GameTries foundGameTries = gameService.findTriesByUserIdAndGameId(loggedInUser.getId(), gameId);
 
         if(foundGameTries != null){
             if(foundGameTries.getTries() == 0){
@@ -122,7 +121,7 @@ public class AjaxController {
             else{
                 foundGameTries.setTries(foundGameTries.getTries() - 1);
 
-                GameTries savedGameTries = gameTriesService.save(foundGameTries);
+                GameTries savedGameTries = gameService.saveGameTries(foundGameTries);
                 Game game = gameService.findGameById(gameId);
 
                 Event tryEvent = new Event();
@@ -142,7 +141,7 @@ public class AjaxController {
             gameTries.setUser(loggedInUser);
             gameTries.setTries(NUMBER_OF_TRIES);
 
-            GameTries savedGameTries = gameTriesService.save(gameTries);
+            GameTries savedGameTries = gameService.saveGameTries(gameTries);
 
             Event tryEvent = new Event();
             tryEvent.setUser(loggedInUser);
@@ -159,8 +158,9 @@ public class AjaxController {
     public ResponseEntity<GameResult> playGameViaAjax(@RequestParam("gameId") int gameId, HttpSession session){
         User loggedInUser = (User) session.getAttribute("user");
         Game game = gameService.findGameById(gameId);
+        UserWallet wallet = userService.getWalletForUser(loggedInUser.getUsername());
 
-        boolean isBalanced = hasEnoughBalance(loggedInUser, game);
+        boolean isBalanced = hasEnoughBalance(wallet, game);
 
         if(isBalanced) {
             boolean isAWin = findRandomOddsForPlayingMode(game.getOdds());
@@ -168,10 +168,10 @@ public class AjaxController {
             GameResult gameResult = new GameResult();
             gameResult.setEnoughBalance(true);
             gameResult.setResult(isAWin);
-            gameResult.setOldBalance(loggedInUser.getWallet().getBalance());
-            gameResult.setNewBalance(calculateAndUpdateBalance(isAWin, loggedInUser, game));
+            gameResult.setOldBalance(wallet.getBalance());
+            gameResult.setNewBalance(calculateAndUpdateBalance(isAWin, wallet, game));
 
-            gamePlayService.save(loggedInUser,game,isAWin);
+            gameService.saveGamePlay(loggedInUser,game,isAWin);
 
             Event playEvent = new Event();
             playEvent.setUser(loggedInUser);
@@ -185,7 +185,7 @@ public class AjaxController {
             GameResult gameResult = new GameResult();
             gameResult.setEnoughBalance(false);
             gameResult.setResult(false);
-            gameResult.setOldBalance(loggedInUser.getWallet().getBalance());
+            gameResult.setOldBalance(wallet.getBalance());
             return new ResponseEntity<>(gameResult,  HttpStatus.OK);
         }
     }
@@ -213,25 +213,24 @@ public class AjaxController {
         }
     }
 
-    private boolean hasEnoughBalance(User user, Game game){
-        return ((user.getWallet().getBalance()) >= (game.getPrice()));
+    private boolean hasEnoughBalance(UserWallet wallet, Game game){
+        return ((wallet.getBalance()) >= (game.getPrice()));
     }
 
-    private int calculateAndUpdateBalance(boolean isWin, User user, Game game){
+    private int calculateAndUpdateBalance(boolean isWin, UserWallet wallet, Game game){
         int newBalance;
 
         if(isWin){
-            newBalance = user.getWallet().getBalance() + (game.getPrize() - game.getPrice());
+            newBalance = wallet.getBalance() + (game.getPrize() - game.getPrice());
         }
         else{
-            newBalance = user.getWallet().getBalance() - game.getPrice();
+            newBalance = wallet.getBalance() - game.getPrice();
         }
 
-        UserWallet userWallet = user.getWallet();
-        userWallet.setBalance(newBalance);
+        wallet.setBalance(newBalance);
 
-        userWalletService.save(userWallet);
+        userService.saveWallet(wallet);
 
-        return userWallet.getBalance();
+        return wallet.getBalance();
     }
 }

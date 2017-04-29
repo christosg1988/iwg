@@ -1,10 +1,9 @@
 package gr.codingschool.iwg.web.user;
 
-import gr.codingschool.iwg.model.Game;
-import gr.codingschool.iwg.model.GamePlay;
+import gr.codingschool.iwg.model.game.Game;
+import gr.codingschool.iwg.model.game.GamePlay;
 import gr.codingschool.iwg.model.SortedOption;
-import gr.codingschool.iwg.model.User;
-import gr.codingschool.iwg.service.GamePlayService;
+import gr.codingschool.iwg.model.user.User;
 import gr.codingschool.iwg.service.GameService;
 import gr.codingschool.iwg.service.NotificationService;
 import gr.codingschool.iwg.service.UserService;
@@ -30,8 +29,6 @@ public class UserGamesController {
     @Autowired
     private GameService gameService;
     @Autowired
-    private GamePlayService gamePlayService;
-    @Autowired
     private NotificationService notificationService;
     @Autowired
     private UserService userService;
@@ -50,7 +47,7 @@ public class UserGamesController {
         Page<Game> gamePage = gameService.findAllGames(pageable);
         PageWrapper<Game> page = new PageWrapper<Game>(gamePage, "/user/games");
 
-        List<GamePlay> recentGames = gamePlayService.findRecentlyPlayedByUser(user);
+        List<GamePlay> recentGames = gameService.findRecentlyPlayedByUser(user);
 
         modelAndView.addObject("selected", findSelectedOption(pageable));
         modelAndView.addObject("sortedOptions", createSortedOptions());
@@ -81,7 +78,7 @@ public class UserGamesController {
 
         PageWrapper<Game> page = new PageWrapper<Game>(gamePage, "/user/favourites");
 
-        List<GamePlay> recentGames = gamePlayService.findRecentlyPlayedByUser(user);
+        List<GamePlay> recentGames = gameService.findRecentlyPlayedByUser(user);
 
         modelAndView.addObject("selected", findSelectedOption(pageable));
         modelAndView.addObject("sortedOptions", createSortedOptions());
