@@ -428,6 +428,11 @@
 		color: red;
 	}
 
+	#edit {
+		transition: color .3s linear;
+		color: #777777;
+	}
+
 	#notFavourite {
 		transition: color .3s linear;
 		color: white;
@@ -436,6 +441,15 @@
 	#gamesFavourite{
 		transition: color .3s linear;
 		color: red;
+	}
+
+	#edit:hover,
+	#edit:active,
+	#edit:focus
+	{
+		text-decoration:none;
+		outline:none;
+		color: #fff;  /*#505050*/
 	}
 
 	#favourite:hover,

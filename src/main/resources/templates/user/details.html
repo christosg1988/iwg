@@ -39,47 +39,47 @@
     <h2 class="t-left white">Welcome <span th:utext="${user.firstName}"></span> <span th:utext="${user.lastName}"></span>!</h2>
         <div class="row">
             <div class="col-md-6 col-md-offset-3 mtop40 quicksand">
-                <form autocomplete="off" th:action="@{/user/details/edit}"
-                      th:object="${updatedUser}" method="post" class="form-horizontal"
+                <form autocomplete="off" th:action="@{/user/details}"
+                      th:object="${user}" method="post" class="form-horizontal"
                       role="form">
                     <h2 style="color: cornsilk">Edit Details</h2>
 
                     <div class="form-group mtop40">
                         <div class="col-sm-10 col-md-10 col-md-offset-1">
                             <input type="text" th:field="*{username}"
-                                   placeholder="${user.username}" class="form-control" />
+                                   th:placeholder="${user.username}" class="form-control" required/>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div class="col-sm-10 col-md-10 col-md-offset-1">
-                            <input type="text" th:field="*{email}" placeholder=${user.email}"
-                                   class="form-control" />
+                            <input type="text" th:field="*{email}" th:placeholder="${user.email}"
+                                   class="form-control" required/>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div class="col-sm-4 col-md-4 col-md-offset-1">
-                            <input type="text" th:field="*{firstName}" placeholder="${user.firstName}"
-                                   class="form-control" />
+                            <input type="text" th:field="*{firstName}" th:placeholder="${user.firstName}"
+                                   class="form-control" required/>
                         </div>
                         <div class="col-sm-6 col-md-6">
                             <input type="text" th:field="*{lastName}"
-                                   placeholder="${user.lastName}" class="form-control" />
+                                   th:placeholder="${user.lastName}" class="form-control" required/>
                         </div>
                     </div>
 
                     <div class="form-group mtop40">
                         <div class="col-sm-10 col-md-10 col-md-offset-1">
-                            <input type="text" th:field="*{address}" placeholder="${user.address}"
-                                   class="form-control" />
+                            <input type="text" th:field="*{address}" th:placeholder="${user.address}"
+                                   class="form-control" required/>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div class="col-sm-10 col-md-10 col-md-offset-1">
-                            <input type="text" th:field="*{phoneNumber}" placeholder="${user.phoneNumber}"
-                                   class="form-control" />
+                            <input type="text" th:field="*{phoneNumber}" th:placeholder="${user.phoneNumber}"
+                                   class="form-control" required/>
                         </div>
                     </div>
                     <div class="form-group mtop40">

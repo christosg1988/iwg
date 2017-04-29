@@ -1,19 +1,15 @@
 package gr.codingschool.iwg.web.user;
 
-import gr.codingschool.iwg.model.Event;
-import gr.codingschool.iwg.model.user.UpdatedUser;
 import gr.codingschool.iwg.model.user.User;
 import gr.codingschool.iwg.service.NotificationService;
 import gr.codingschool.iwg.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 
 @Controller
 public class EditDetailsController {
@@ -29,8 +25,6 @@ public class EditDetailsController {
         int unreadNotifications = notificationService.findUnreadNotificationsByUser(loggedInUser).size();
         User user = userService.findByUsername(loggedInUser.getUsername());
 
-        UpdatedUser updatedUser = new UpdatedUser();
-        modelAndView.addObject("updatedUser", updatedUser);
         modelAndView.addObject("unreadNotifications", unreadNotifications);
         modelAndView.addObject("user", user);
         modelAndView.addObject("wallet", user.getWallet());
@@ -38,28 +32,28 @@ public class EditDetailsController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/user/details/edit", method = RequestMethod.POST)
-    public ModelAndView updateUser(@Valid UpdatedUser user, HttpSession session, BindingResult bindingResult) {
+    @RequestMapping(value = "/user/details", method = RequestMethod.POST)
+    public ModelAndView updateUser(User user, HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();
 
-        if (bindingResult.hasErrors()) {
-            modelAndView.setViewName("/user/details/");
-            return modelAndView;
-        }
+        User sessionUser = (User) session.getAttribute("user");
+        User loggedInUser = userService.findByUsername(sessionUser.getUsername());
 
-        User loggedInUser = (User) session.getAttribute("user");
         loggedInUser.setUsername(user.getUsername());
         loggedInUser.setFirstName(user.getFirstName());
         loggedInUser.setLastName(user.getLastName());
         loggedInUser.setAddress(user.getAddress());
         loggedInUser.setPhoneNumber(user.getPhoneNumber());
         loggedInUser.setEmail(user.getEmail());
+
         User updatedUser = userService.updateUser(loggedInUser);
+
         int unreadNotifications = notificationService.findUnreadNotificationsByUser(updatedUser).size();
         modelAndView.addObject("unreadNotifications", unreadNotifications);
         modelAndView.addObject("user", updatedUser);
         modelAndView.addObject("wallet", updatedUser.getWallet());
         modelAndView.setViewName("user/details");
+
         return modelAndView;
     }
 }

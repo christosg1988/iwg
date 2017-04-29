@@ -9,9 +9,9 @@ import gr.codingschool.iwg.model.game.Game;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.data.jpa.repository.Modifying;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ public class User{
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_id_seq")
     @Column(name = "id")
     private int id;
-    
+
     @Column(name = "username")
     @NotEmpty(message = "*Please provide a username")
     private String username;
@@ -61,7 +61,6 @@ public class User{
     private String address;
 
     @Column(name = "dateOfBirth")
-    @NotEmpty(message = "*Please provide your date of birth")
     private Date dateOfBirth;
 
     @Column(name = "active")
