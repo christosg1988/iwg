@@ -8,6 +8,7 @@ $(document).ready(function(){
 
     $('.selectpicker').selectpicker();
 
+
     $('#loginForm').on('submit', function(event){
         event.preventDefault();
 
@@ -46,5 +47,4 @@ $(document).ready(function(){
 function getGameId(gameID){
     game_id = gameID;
 }
-
 

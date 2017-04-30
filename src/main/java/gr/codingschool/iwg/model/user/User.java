@@ -78,6 +78,10 @@ public class User{
     @JoinTable(name = "users_favourite_games", joinColumns = @JoinColumn(name = "userId", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "gameId", referencedColumnName = "id"))
     private Set<Game> favouriteGames;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "users_rated_games", joinColumns = @JoinColumn(name = "userId", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "gameId", referencedColumnName = "id"))
+    private Set<Game> ratedGames;
+
     public int getId() {
         return id;
     }
@@ -200,5 +204,23 @@ public class User{
         }
 
         return favouriteGameIds;
+    }
+
+    public Set<Game> getRatedGames() {
+        return ratedGames;
+    }
+
+    public void setRatedGames(Set<Game> ratedGames) {
+        this.ratedGames = ratedGames;
+    }
+
+    public List<Integer> getListOfRatedGameIds(){
+        List<Integer> ratedGameIds = new ArrayList<>();
+
+        for(Game game : ratedGames){
+            ratedGameIds.add(game.getId());
+        }
+
+        return ratedGameIds;
     }
 }

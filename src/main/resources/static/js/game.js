@@ -122,6 +122,31 @@ $(document).ready(function(){
             }
         });
     });
+
+    $('input').on('change', function () {
+        game_id = getParameterByName('id');
+        var rate = {};
+        rate["id"] = game_id;
+        rate["value"] = $('input').val();
+
+        $.ajax({
+            type : "POST",
+            url : "/user/game/rate",
+            contentType : "application/json",
+            data : JSON.stringify(rate),
+            timeout : 100000,
+            success : function() {
+                var text = 'Thank you for your vote!';
+
+                sessionStorage.setItem("text", text);
+                sessionStorage.setItem("showSnackbar", 'true');
+
+                window.location.href = "/user/game?id=" + game_id;
+            },
+            error : function() {
+            }
+        });
+    });
 });
 
 
@@ -179,4 +204,14 @@ function getInfo(gameID, gamePrice){
 
 function getGameId(gameID){
     game_id = gameID;
+}
+
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
 }

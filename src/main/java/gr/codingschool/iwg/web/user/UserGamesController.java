@@ -24,7 +24,7 @@ import java.util.List;
 
 @Controller
 public class UserGamesController {
-    private final static String[] SORT_OPTIONS = {"Name", "Odds", "Price", "Prize"};
+    private final static String[] SORT_OPTIONS = {"Name", "Odds", "Price", "Prize", "Rating"};
 
     @Autowired
     private GameService gameService;

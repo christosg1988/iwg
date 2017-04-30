@@ -93,6 +93,7 @@ public class UserService {
         Role userRole = roleRepository.findByRole("ROLE_USER");
         user.setRoles(new HashSet<>(Collections.singletonList(userRole)));
         user.setFavouriteGames(new HashSet<>());
+        user.setRatedGames(new HashSet<>());
         return userRepository.save(user);
     }
 

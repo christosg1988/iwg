@@ -34,6 +34,12 @@ public class Game {
     @Column(name = "image", nullable = false)
     private String image;
 
+    @Column(name = "rating", nullable = false, columnDefinition = "Double(1,2) default '0.00'")
+    private double rating;
+
+    @Column(name = "usersRated", nullable = false, columnDefinition = "Integer default '0'")
+    private int usersRated;
+
     public int getId() {
         return id;
     }
@@ -88,5 +94,21 @@ public class Game {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public int getUsersRated() {
+        return usersRated;
+    }
+
+    public void setUsersRated(int usersRated) {
+        this.usersRated = usersRated;
     }
 }

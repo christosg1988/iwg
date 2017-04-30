@@ -20,7 +20,7 @@ import java.util.List;
 
 @Controller
 public class HomeController {
-    private final static String[] SORT_OPTIONS = {"Name", "Odds", "Price", "Prize"};
+    private final static String[] SORT_OPTIONS = {"Name", "Odds", "Price", "Prize", "Rating"};
 
     @Autowired
     private GameService gameService;

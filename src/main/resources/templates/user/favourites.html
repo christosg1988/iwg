@@ -4,12 +4,14 @@
 <head>
     <title>Agile Actors IWG - Favourites</title>
     <link rel="stylesheet" type="text/css" href="../../static/css/main.css" th:href="@{../css/main.css}" media="screen" />
+    <link th:href="@{../css/bootstrap-rating.css}" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
     <script type="text/javascript" th:src="@{../js/games.js}"></script>
+    <script type="text/javascript" th:src="@{../js/bootstrap-rating.min.js}"></script>
 </head>
 <body>
 
@@ -27,7 +29,7 @@
         <ul class="nav navbar-nav">
             <li><a href="/user/games">Games</a></li>
             <li><a href="/user/favourites">Favourites</a></li>
-            <li><a href="/user/panel">Control panel</a></li>
+            <li><a href="/user/panel">Profile</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="#"><span class="glyphicon glyphicon-user"></span> <span th:utext="${user.username}"></span> </a></li>
@@ -116,6 +118,7 @@
                         <img style="height: 100px; margin: 0 auto" class="img-responsive" th:src="${gamePlay.game.image}" th:title="${gamePlay.game.name}" th:alt="${gamePlay.game.name}">
                     </div>
                     <ul class="list-group text-center">
+                        <li class="list-group-item"><i class="fa fa-check"></i><input type="hidden" class="rating" th:value="${game.rating}" data-readonly><span style="margin-left: 2px" >(</span><span th:text="${game.usersRated}"> </span><span style="margin-left: 1px" class="glyphicon glyphicon-user">)</span></li>
                         <li class="list-group-item"><i class="fa fa-check"></i><span>Odds of result: </span><span th:text="${gamePlay.game.odds}"></span><span> %</span></li>
                         <li class="list-group-item"><i class="fa fa-check"></i><span>Game price: </span><span th:text="${gamePlay.game.price}"></span><span> &euro;</span></li>
                         <li class="list-group-item"><i class="fa fa-check"></i> <span>Prize: </span><span th:text="${gamePlay.game.prize}"></span><span> &euro;</span></li>

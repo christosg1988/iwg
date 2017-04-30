@@ -33,8 +33,9 @@ public class UserGameController {
         ModelAndView modelAndView = new ModelAndView();
 
         User loggedInUser = (User) session.getAttribute("user");
-        int unreadNotifications = notificationService.findUnreadNotificationsByUser(loggedInUser).size();
         User user = userService.findByUsername(loggedInUser.getUsername());
+
+        int unreadNotifications = notificationService.findUnreadNotificationsByUser(user).size();
 
         Game game = gameService.findGameById(id);
         List<GamePlay> recentGames = gameService.findRecentlyPlayedByUser(user);
@@ -44,6 +45,7 @@ public class UserGameController {
         modelAndView.addObject("wallet", user.getWallet());
         modelAndView.addObject("game", game);
         modelAndView.addObject("isFavourite", isFavouriteGame(user, game));
+        modelAndView.addObject("isRated", isRatedGame(user, game));
         modelAndView.addObject("recent", recentGames);
 
         modelAndView.setViewName("user/game");
@@ -53,5 +55,9 @@ public class UserGameController {
 
     private boolean isFavouriteGame(User user, Game game){
         return user.getListOfFavouriteGameIds().contains(game.getId());
+    }
+
+    private boolean isRatedGame(User user, Game game){
+        return user.getListOfRatedGameIds().contains(game.getId());
     }
 }

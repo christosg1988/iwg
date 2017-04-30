@@ -5,6 +5,7 @@
 <head>
     <title>Agile Actors IWG - Games</title>
     <link rel="stylesheet"  type="text/css" th:href="@{css/main.css}" media="screen" />
+    <link th:href="@{css/bootstrap-rating.css}" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -12,6 +13,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
     <script type="text/javascript" th:src="@{js/games.js}">
     </script>
+    <script type="text/javascript" th:src="@{js/bootstrap-rating.min.js}"></script>
+
 </head>
 <body>
 
@@ -59,6 +62,7 @@
                     <img style="height: 100px; margin: 0 auto" class="img-responsive" th:src="${game.image}" th:title="${game.name}" th:alt="${game.name}">
                 </div>
                 <ul class="list-group text-center">
+                    <li class="list-group-item"><i class="fa fa-check"></i><input type="hidden" class="rating" th:value="${game.rating}" data-readonly><span style="margin-left: 2px" >(</span><span th:text="${game.usersRated}"> </span><span style="margin-left: 1px" class="glyphicon glyphicon-user">)</span></li>
                     <li class="list-group-item"><i class="fa fa-check"></i><span>Odds of result: </span><span th:text="${game.odds}"></span><span> %</span></li>
                     <li class="list-group-item"><i class="fa fa-check"></i><span>Game price: </span><span th:text="${game.price}"></span><span> &euro;</span></li>
                     <li class="list-group-item"><i class="fa fa-check"></i> <span>Prize: </span><span th:text="${game.prize}"></span><span> &euro;</span></li>

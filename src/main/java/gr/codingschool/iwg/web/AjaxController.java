@@ -5,6 +5,7 @@ import gr.codingschool.iwg.model.*;
 import gr.codingschool.iwg.model.game.Game;
 import gr.codingschool.iwg.model.game.GameResult;
 import gr.codingschool.iwg.model.game.GameTries;
+import gr.codingschool.iwg.model.game.RateForm;
 import gr.codingschool.iwg.model.user.LoginForm;
 import gr.codingschool.iwg.model.user.User;
 import gr.codingschool.iwg.model.user.UserWallet;
@@ -64,6 +65,28 @@ public class AjaxController {
         eventService.save(loginEvent);
 
         session.setAttribute("user", existingUser);
+
+        return new ResponseEntity<Authenticator.Success>(HttpStatus.OK);
+    }
+
+    @SuppressWarnings("Duplicates")
+    @RequestMapping(value = {"/user/game/rate"})
+    public ResponseEntity getRateResultViaAjax(@RequestBody RateForm rateForm, HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("user");
+        User user = userService.findByUsername(loggedInUser.getUsername());
+
+        Game game = gameService.findGameById(rateForm.getId());
+
+        user.getRatedGames().add(game);
+        userService.updateUser(user);
+
+        rateGame(game, rateForm.getValue());
+
+        Event rateEvent = new Event();
+        rateEvent.setUser(user);
+        rateEvent.setType("Rate game");
+        rateEvent.setInformation("The user rated the game with '" + rateForm.getValue());
+        eventService.save(rateEvent);
 
         return new ResponseEntity<Authenticator.Success>(HttpStatus.OK);
     }
@@ -232,5 +255,12 @@ public class AjaxController {
         userService.saveWallet(wallet);
 
         return wallet.getBalance();
+    }
+
+    private void rateGame(Game game, double value){
+        game.setRating((double)((game.getRating() * game.getUsersRated()) + value) / (double) (game.getUsersRated() + 1));
+        game.setUsersRated(game.getUsersRated() + 1);
+
+        gameService.saveGame(game);
     }
 }
